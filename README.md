@@ -1,5 +1,11 @@
 # AD-Capital-Docker
 
+AppDynamics Transaction Analytics demo application with Docker support
+
+**PLEASE NOTE: This repository has been recreated. If you previously cloned this repository, you should delete the original and re-clone. Apologies for any inconveience**
+
+See [AppDynamics/AD-Capital](https://github.com/Appdynamics/AD-Capital) for application source code
+
 Building the Container Images
 -----------------------------
 
