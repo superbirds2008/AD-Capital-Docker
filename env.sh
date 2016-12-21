@@ -72,6 +72,7 @@ fi
 # Set in Dockerfile based on installed App Server Agent version: _VERSION_STRING will be replaced during build
 export VERSION_STRING="_VERSION_STRING"
 
+export UA_CONFIG=${UA_HOME}/conf/universalagent.yaml
 export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m"
 export APPD_JAVA_OPTS="${JAVA_OPTS} -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
 export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${APPD_JAVA_OPTS}"

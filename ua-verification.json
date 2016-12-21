@@ -1,0 +1,45 @@
+{
+ "name": "verification",
+ "comments": "Update Agents for` Verification node",
+ "config": {},
+ "rules": [
+   {
+     "name": "java-4.2.9.2",
+     "monitor": "java",
+     "comments": "Update Java Agent to 4.2.9.2",
+     "config":
+     {
+       "version": "4.2.9.2",
+       "state": "attached",
+       "application_name": "AD-Capital",
+       "tier_name": "ApplicationProcessor-Services",
+       "node_name": "AD-Capital_VERIFICATION_NODE",
+       "deploy_cmd": ".*Verification.*"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "machine-4.2.9.2",
+     "monitor": "machine",
+     "comments": "Update Machine Agent to 4.2.9.2",
+     "config": {
+       "state": "started",
+       "version": "4.2.9.2",
+       "application_name": "AD-Capital",
+       "tier_name": "ApplicationProcessor-Services",
+       "node_name": "AD-Capital_VERIFICATION_NODE"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "Universal Agent rule",
+     "monitor": "universal-4.3.0.0",
+     "comments": "Update Universal Agent to 4.3.0.0",
+     "config": {
+       "state": "started",
+       "version": "4.3.0.0"
+     },
+     "condition": "True"
+   }
+ ]
+}

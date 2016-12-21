@@ -2,6 +2,14 @@ FROM appdynamics/adcapital-java:latest
 
 # Environment vars: Tomcat
 ENV CATALINA_HOME /tomcat
+ENV UA_INSTALL /ua
+ENV UA_HOME /opt/appdynamics/universal-agent
+
+# Install rsyslog to tail log file
+RUN yum install -y rsyslog
+
+# Install sudo for Universal Agent
+RUN yum install -y sudo
 
 # Install Tomcat
 COPY /apache-tomcat.tar.gz /apache-tomcat.tar.gz
@@ -20,15 +28,21 @@ ADD MachineAgent.zip /
 RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN rm MachineAgent.zip
 
+# Universal Agent Install
+ADD UniversalAgent.zip /
+RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
+
 ENV CLIENT_HOME /opt/applicationprocessor
 RUN mkdir -p ${CLIENT_HOME}
 ADD Verification.jar ${CLIENT_HOME}/
 
 RUN export TERM=${TERM:-dumb}
 
-ADD startup.sh /
 ADD env.sh /
+ADD startup.sh /
 RUN chmod 744 /startup.sh
+ADD restart.sh /
+RUN chmod 744 /restart.sh
 ADD start-analytics.sh /usr/bin/start-analytics
 RUN chmod 744 /usr/bin/start-analytics
 

@@ -77,13 +77,28 @@ sed -i "s/<machine-path>/<machine-path>${MACHINE_PATH_1}|${MACHINE_PATH_2}|${MAC
 # Enable Analytics
 start-analytics
 
-# Start Machine Agent
-echo MACHINE_AGENT_JAVA_OPTS: ${MACHINE_AGENT_JAVA_OPTS}
-echo JMX_OPTS: ${JMX_OPTS}
-java ${MACHINE_AGENT_JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar > ${MACHINE_AGENT_HOME}/machine-agent.out 2>&1 &
+# Install Universal Agent
+${UA_INSTALL}/ua4.3.0.0/bin/install.sh -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
 
-# Start App Server Agent
-echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};
+# Set LD_PRELOAD and add jre/lib/ext/tools.jar before starting agent JVMs
+/opt/appdynamics/universal-agent/ua --enable-ldpreload
+. /opt/appdynamics/universal-agent/ua_preload.sh
+cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
+
+# Start Machine Agent
+#echo MACHINE_AGENT_JAVA_OPTS: ${MACHINE_AGENT_JAVA_OPTS}
+#echo JMX_OPTS: ${JMX_OPTS}
+#java ${MACHINE_AGENT_JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar > ${MACHINE_AGENT_HOME}/machine-agent.out 2>&1 &
+
+# Start Tomcat
 echo JMX_OPTS: ${JMX_OPTS}
 cd ${CATALINA_HOME}/bin;
-java -javaagent:${CATALINA_HOME}/appagent/javaagent.jar ${APP_AGENT_JAVA_OPTS} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > appserver-agent-startup.out 2>&1
+echo LD_PRELOAD: ${LD_PRELOAD}
+java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > appserver-agent-startup.out 2>&1 &
+
+#echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS}
+#java -javaagent:${CATALINA_HOME}/appagent/javaagent.jar ${APP_AGENT_JAVA_OPTS} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > appserver-agent-startup.out 2>&1 &
+
+# Start rsyslog and tail
+service rsyslog start
+tail -f /var/log/messages

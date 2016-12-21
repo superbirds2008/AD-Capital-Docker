@@ -11,6 +11,14 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 ENV TOMCAT_MAJOR_VERSION 8
 ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
+ENV UA_INSTALL /ua
+ENV UA_HOME /opt/appdynamics/universal-agent
+
+# Install rsyslog to tail log file
+RUN yum install -y rsyslog
+
+# Install sudo for Universal Agent
+RUN yum install -y sudo
 
 # Install Tomcat
 RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
@@ -31,6 +39,10 @@ ADD MachineAgent.zip /
 RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN rm MachineAgent.zip
 
+# Universal Agent Install
+ADD UniversalAgent.zip /
+RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
+
 ENV CLIENT_HOME /opt/applicationprocessor
 
 RUN export TERM=${TERM:-dumb}
@@ -41,9 +53,11 @@ ADD AD-Capital /AD-Capital
 # Gradle build
 RUN cd /AD-Capital;gradle uberjar; mkdir ${CLIENT_HOME}; cp /AD-Capital/Verification/build/libs/Verification.jar ${CLIENT_HOME};
 
-ADD startup.sh /
 ADD env.sh /
+ADD startup.sh /
 RUN chmod 744 /startup.sh
+ADD restart.sh /
+RUN chmod 744 /restart.sh
 ADD start-analytics.sh /usr/bin/start-analytics
 RUN chmod 744 /usr/bin/start-analytics
 

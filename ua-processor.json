@@ -1,0 +1,45 @@
+{
+ "name": "processor",
+ "comments": "Update Agents for Loan Processor node",
+ "config": {},
+ "rules": [
+   {
+     "name": "java-4.2.7.2",
+     "monitor": "java",
+     "comments": "Update Java Agent to 4.2.7.2",
+     "config":
+     {
+       "version": "4.2.7.2",
+       "state": "attached",
+       "application_name": "AD-Capital",
+       "tier_name": "LoanProcessor-Services",
+       "node_name": "AD-Capital_PROCESSOR_NODE",
+       "deploy_cmd": ".*Bootstrap.*"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "machine-4.2.7.2",
+     "monitor": "machine",
+     "comments": "Update Machine Agent to 4.2.7.2",
+     "config": {
+       "state": "started",
+       "version": "4.2.7.2",
+       "application_name": "AD-Capital",
+       "tier_name": "LoanProcessor-Services",
+       "node_name": "AD-Capital_PROCESSOR_NODE"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "Universal Agent rule",
+     "monitor": "universal-4.3.0.0",
+     "comments": "Update Universal Agent to 4.3.0.0",
+     "config": {
+       "state": "started",
+       "version": "4.3.0.0"
+     },
+     "condition": "True"
+   }
+ ]
+}

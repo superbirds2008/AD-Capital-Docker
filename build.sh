@@ -10,11 +10,11 @@
 
 cleanUp() {
   if [ -z ${PREPARE_ONLY} ]; then 
-    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Rest.war portal.war processor.war)
+    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
     (cd ADCapital-Tomcat && rm -rf AD-Capital)
-    (cd ADCapital-ApplicationProcessor && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Verification.jar)
+    (cd ADCapital-ApplicationProcessor && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Verification.jar UniversalAgent.zip)
     (cd ADCapital-ApplicationProcessor && rm -rf AD-Capital)
-    (cd ADCapital-QueueReader && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz QueueReader.jar)
+    (cd ADCapital-QueueReader && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz QueueReader.jar UniversalAgent.zip)
     (cd ADCapital-QueueReader && rm -rf AD-Capital)
     (cd ADCapital-Load && rm -rf AD-Capital-Load load-generator.zip)
     (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
@@ -34,6 +34,7 @@ promptForAgents() {
   read -e -p "Enter path to App Server Agent: " APP_SERVER_AGENT
   read -e -p "Enter path to Machine Agent (zip): " MACHINE_AGENT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
+  read -e -p "Enter path to Universal Agent: " UNIVERSAL_AGENT
 }
 
 buildContainers() {
@@ -88,6 +89,7 @@ then
   echo "Specify agent locations: build.sh
           -a <Path to App Server Agent>
           -m <Path to Machine Agent>
+          -u <Path to Universal Agent>
           [-j <Path to Oracle JDK7>]
           [-b <Path to local AD-Capital build>]
           [-l <Path to local AD-Capital-Load build>]
@@ -96,13 +98,13 @@ then
   exit 0
 fi
 
-# Prompt for location of App Server, Machine and Database Agents
+# Prompt for location of Agents
 if  [ $# -eq 0 ]
 then
   promptForAgents
 else
   # Allow user to specify locations of App Server and Analytics Agents
-  while getopts "a:m:j:b:l:p:t:" opt; do
+  while getopts "a:m:j:b:l:p:t:u:" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT=$OPTARG
@@ -114,6 +116,12 @@ else
         MACHINE_AGENT=$OPTARG 
 	if [ ! -e ${MACHINE_AGENT} ]; then
           echo "Not found: ${MACHINE_AGENT}"; exit         
+        fi
+        ;;
+      u)
+        UNIVERSAL_AGENT=$OPTARG
+        if [ ! -e ${UNIVERSAL_AGENT} ]; then
+          echo "Not found: ${UNIVERSAL_AGENT}"; exit
         fi
         ;;
       j)
@@ -188,6 +196,11 @@ cp ${MACHINE_AGENT} ADCapital-QueueReader/MachineAgent.zip
 cp ${APP_SERVER_AGENT} ADCapital-Tomcat/AppServerAgent.zip
 cp ${APP_SERVER_AGENT} ADCapital-ApplicationProcessor/AppServerAgent.zip
 cp ${APP_SERVER_AGENT} ADCapital-QueueReader/AppServerAgent.zip
+
+# Add Universal Agent to build
+cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
+cp ${UNIVERSAL_AGENT} ADCapital-ApplicationProcessor/UniversalAgent.zip
+cp ${UNIVERSAL_AGENT} ADCapital-QueueReader/UniversalAgent.zip
 
 # Add common environment to build
 cp env.sh ADCapital-Tomcat
