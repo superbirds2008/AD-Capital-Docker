@@ -14,7 +14,7 @@
        "application_name": "AD-Capital",
        "tier_name": "Portal-Services",
        "node_name": "AD-Capital_PORTAL_NODE",
-       "deploy_cmd": ".*Bootstrap.*"
+       "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
    },

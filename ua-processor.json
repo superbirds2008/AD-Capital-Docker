@@ -14,7 +14,7 @@
        "application_name": "AD-Capital",
        "tier_name": "LoanProcessor-Services",
        "node_name": "AD-Capital_PROCESSOR_NODE",
-       "deploy_cmd": ".*Bootstrap.*"
+       "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
    },
@@ -33,7 +33,7 @@
    },
    {
      "name": "Universal Agent rule",
-     "monitor": "universal-4.3.0.0",
+     "monitor": "universal",
      "comments": "Update Universal Agent to 4.3.0.0",
      "config": {
        "state": "started",

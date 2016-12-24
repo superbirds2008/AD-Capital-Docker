@@ -56,8 +56,10 @@ RUN cd /AD-Capital;gradle uberjar; mkdir ${CLIENT_HOME}; cp /AD-Capital/QueueRea
 ADD env.sh /
 ADD startup.sh /
 RUN chmod 744 /startup.sh
-ADD restart.sh /
-RUN chmod 744 /restart.sh
+ADD restart.sh /usr/bin/restart
+RUN chmod 744 /usr/bin/restart
+ADD ua-debug.sh /usr/bin/ua-debug
+RUN chmod 744 /usr/bin/ua-debug
 ADD start-analytics.sh /usr/bin/start-analytics
 RUN chmod 744 /usr/bin/start-analytics
 

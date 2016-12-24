@@ -14,7 +14,7 @@
        "application_name": "AD-Capital",
        "tier_name": "Authentication-Services",
        "node_name": "AD-Capital_REST_NODE",
-       "deploy_cmd": ".*Bootstrap.*"
+       "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
    },
