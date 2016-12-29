@@ -1,6 +1,6 @@
 # AD-Capital-Docker
 
-AppDynamics Transaction Analytics demo application with Docker support
+AppDynamics Transaction Analytics demo application with Docker support.  This branch (universal-agent) includes support for the AppDynamics Universal Agent feature - please note that the Universal Agent does not currently support the Analytics Agent, but this example project will run with the App Server Agent and Machine started via the AppDynamics Universal Agent, with full APM functionality.
 
 **PLEASE NOTE: This repository has been recreated. If you previously cloned this repository, you should delete the original and re-clone. Apologies for any inconveience**
 
