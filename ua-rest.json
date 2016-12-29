@@ -4,27 +4,28 @@
  "config": {},
  "rules": [
    {
-     "name": "java-4.2.6.2",
+     "name": "java-4.2.9.2",
      "monitor": "java",
-     "comments": "Update Java Agent to 4.2.6.2",
+     "comments": "Update Java Agent to 4.2.9.2",
      "config":
      {
-       "version": "4.2.6.2",
+       "version": "4.2.9.2",
        "state": "attached",
        "application_name": "AD-Capital",
        "tier_name": "Authentication-Services",
        "node_name": "AD-Capital_REST_NODE",
+       "runtime_directory": "appdynamics",
        "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
    },
    {
-     "name": "machine-4.2.6.2",
+     "name": "machine-4.2.9.2",
      "monitor": "machine",
-     "comments": "Update Machine Agent to 4.2.6.2",
+     "comments": "Update Machine Agent to 4.2.9.2",
      "config": {
        "state": "started",
-       "version": "4.2.6.2",
+       "version": "4.2.9.2",
        "application_name": "AD-Capital",
        "tier_name": "Authentication-Services",
        "node_name": "AD-Capital_REST_NODE"

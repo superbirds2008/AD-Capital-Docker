@@ -26,8 +26,9 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
     && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
     && tar zxf apache-tomcat-*.tar.gz \
     && rm apache-tomcat-*.tar.gz* \
-    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
+    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} ${CATALINA_HOME}
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
+RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
 ADD AppServerAgent.zip /
 RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent; rm AppServerAgent.zip

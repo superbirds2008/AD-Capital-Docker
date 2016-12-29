@@ -12,3 +12,7 @@ RUN rm jdk-linux-x64.rpm
 ENV JAVA_HOME /usr/java/default
 ENV APPDYNAMICS_SIM_ENABLED true
 ENV PATH $PATH:$JAVA_HOME/bin
+
+RUN groupadd -r -g 2002 appdynamics
+RUN useradd --create-home --gid appdynamics -u 2001 appdynamics
+RUN echo 'appdynamics:appdynamics' | chpasswd

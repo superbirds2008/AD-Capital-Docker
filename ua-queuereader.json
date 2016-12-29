@@ -4,27 +4,28 @@
  "config": {},
  "rules": [
    {
-     "name": "java-4.2.10.0",
+     "name": "java-4.2.11.0",
      "monitor": "java",
-     "comments": "Update Java Agent to 4.2.10.0",
+     "comments": "Update Java Agent to 4.2.11.0",
      "config":
      {
-       "version": "4.2.10.0",
+       "version": "4.2.11.0",
        "state": "attached",
        "application_name": "AD-Capital",
        "tier_name": "QueueReader-Services",
        "node_name": "AD-Capital_QUEUEREADER_NODE",
+       "runtime_directory": "appdynamics",
        "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
    },
    {
-     "name": "machine-4.2.10.0",
+     "name": "machine-4.2.11.0",
      "monitor": "machine",
-     "comments": "Update Machine Agent to 4.2.10.0",
+     "comments": "Update Machine Agent to 4.2.11.0",
      "config": {
        "state": "started",
-       "version": "4.2.10.0",
+       "version": "4.2.11.0",
        "application_name": "AD-Capital",
        "tier_name": "QueueReader-Services",
        "node_name": "AD-Capital_QUEUEREADER_NODE"

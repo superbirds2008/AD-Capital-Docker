@@ -17,6 +17,7 @@ RUN tar zxf /apache-tomcat.tar.gz \
     && rm apache-tomcat.tar.gz \
     && mv apache-tomcat* tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
+RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
 # App Server Agent
 ADD AppServerAgent.zip /

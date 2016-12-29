@@ -31,8 +31,8 @@ start-analytics
 ${UA_INSTALL}/ua4.3.0.0/bin/install.sh -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
 
 # Set LD_PRELOAD and add jre/lib/ext/tools.jar before starting agent JVMs
-/opt/appdynamics/universal-agent/ua --enable-ldpreload
-. /opt/appdynamics/universal-agent/ua_preload.sh
+#/opt/appdynamics/universal-agent/ua --enable-ldpreload
+#. /opt/appdynamics/universal-agent/ua_preload.sh
 cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
 # Start Machine Agent
@@ -43,8 +43,9 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 # Start Tomcat Server
 cd ${CATALINA_HOME}/bin;
 echo JMX_OPTS: ${JMX_OPTS}
-java ${JMX_OPTS} -jar ${CLIENT_HOME}/Verification.jar > java-startup.out 2&>1 &
+sudo -u appdynamics -b java ${JMX_OPTS} -jar ${CLIENT_HOME}/Verification.jar > java-startup.out 2>&1
 
+# Start Tomcat with App Server Agent
 #echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};
 #java -javaagent:${CATALINA_HOME}/appagent/javaagent.jar ${APP_AGENT_JAVA_OPTS} ${JMX_OPTS} -jar ${CLIENT_HOME}/Verification.jar > java-startup.out 2&>1 &
 

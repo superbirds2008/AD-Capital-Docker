@@ -14,6 +14,7 @@
        "application_name": "AD-Capital",
        "tier_name": "Portal-Services",
        "node_name": "AD-Capital_PORTAL_NODE",
+       "runtime_directory": "appdynamics",
        "deploy_cmd": ".*jmxremote.*"
      },
      "condition": "True"
