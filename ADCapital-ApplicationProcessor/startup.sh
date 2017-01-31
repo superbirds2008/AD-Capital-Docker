@@ -43,7 +43,7 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 # Start Tomcat Server
 cd ${CATALINA_HOME}/bin;
 echo JMX_OPTS: ${JMX_OPTS}
-sudo -u appdynamics -b java ${JMX_OPTS} -jar ${CLIENT_HOME}/Verification.jar > java-startup.out 2>&1
+java ${JMX_OPTS} -jar ${CLIENT_HOME}/Verification.jar > java-startup.out 2>&1
 
 # Start Tomcat with App Server Agent
 #echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};

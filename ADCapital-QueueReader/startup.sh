@@ -43,7 +43,7 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 # Start App Server Agent
 echo JMX_OPTS: ${JMX_OPTS}
 cd ${CATALINA_HOME}/bin;
-sudo -u appdynamics -b java ${JMX_OPTS} -jar ${CLIENT_HOME}/QueueReader.jar > tomcat-startup.out 2>&1 
+java ${JMX_OPTS} -jar ${CLIENT_HOME}/QueueReader.jar > tomcat-startup.out 2>&1 
 
 # Start Tomcat with App Server Agent
 #echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};

@@ -1,0 +1,45 @@
+{
+ "name": "AD-Capital",
+ "comments": "Agents for AD-Capital",
+ "config": {},
+ "rules": [
+   {
+     "name": "java-4.2.10.0",
+     "monitor": "java",
+     "comments": "Update Java Agent to 4.2.10.0",
+     "config":
+     {
+       "version": "4.2.10.0",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "machine-4.2.10.0",
+     "monitor": "machine",
+     "comments": "Update Machine Agent to 4.2.10.0",
+     "config": {
+       "state": "started",
+       "version": "4.2.10.0",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "Universal Agent rule",
+     "monitor": "universal",
+     "comments": "Update Universal Agent to 4.3.0.0",
+     "config": {
+       "state": "started",
+       "version": "4.3.0.0"
+     },
+     "condition": "True"
+   }
+ ]
+}

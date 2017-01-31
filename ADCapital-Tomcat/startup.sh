@@ -95,7 +95,7 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 # Start Tomcat
 echo JMX_OPTS: ${JMX_OPTS}
 cd ${CATALINA_HOME}/bin;
-sudo -u appdynamics -b java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > tomcat-startup.out 2>&1
+java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > tomcat-startup.out 2>&1
 
 # Start Tomcat with App Server Agent
 #echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS}

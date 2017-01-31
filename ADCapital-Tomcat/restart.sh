@@ -12,6 +12,6 @@ export APPDYNAMICS_UA_DEBUG=true
 
 # Start Tomcat (without javaagent)
 cd ${CATALINA_HOME}/bin;
-sudo -u appdynamics java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > tomcat-restart.out 2>&1 &
+java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > tomcat-restart.out 2>&1 &
 echo "Started java process: $!"
 
