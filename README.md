@@ -1,6 +1,6 @@
 # AD-Capital-Docker
 
-AppDynamics Transaction Analytics demo application with Docker support.  This branch (universal-agent) includes support for the AppDynamics Universal Agent feature - please note that the Universal Agent does not currently support the Analytics Agent, but this example project will run with the App Server Agent and Machine started via the AppDynamics Universal Agent, with full APM functionality.
+AppDynamics Transaction Analytics demo application with Docker support.  This branch (universal-agent) includes support for the AppDynamics Universal Agent feature - please note that the Universal Agent does not currently support the Analytics Agent, but this example project will run with the App Server and Machine Agent started via the AppDynamics Universal Agent, with full APM functionality.
 
 **PLEASE NOTE: This repository has been recreated. If you previously cloned this repository, you should delete the original and re-clone. Apologies for any inconveience**
 
@@ -9,11 +9,11 @@ See [AppDynamics/AD-Capital](https://github.com/Appdynamics/AD-Capital) for appl
 Building the Container Images
 -----------------------------
 
-To build the containers, you need to supply paths to the AppDynamics agent installers used by the demo containers.  
+To build the containers, you need to supply paths to the AppDynamics Universal Agent installer (64-bit Linux) used by the demo containers.  
 Download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com)
 
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
-2. Run `build.sh -a <App Server Agent zip> -m <Machine Agent zip> [-j <Oracle JDK7>]` to supply agent installer paths
+2. Run `build.sh -u <Universal Agent path> [-j <Oracle JDK7>]` to supply agent installer paths
 
 Note: Run build.sh with the `-p` flag to prepare the build environment but skip the actual docker container builds.  This will build the Dockerfiles and add the AppDynamics agents to the build dirs: the containers can then be built manually with `docker build -t <container-name> .`  Using this option saves time when making updates to only one or two containers.  You can also use the `-j` flag to avoid downloading the Oracle JDK.
 

@@ -30,23 +30,14 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
-ADD AppServerAgent.zip /
-RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent; rm AppServerAgent.zip
-
-# Zip Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine-agent
-ADD MachineAgent.zip /
-RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
-
 # Universal Agent Install
 ADD UniversalAgent.zip /
 RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
 
 # Add Log Analytics job files
-ADD portal-log4j.job ${MACHINE_AGENT_HOME}/
-ADD processor-log4j.job ${MACHINE_AGENT_HOME}/
-ADD rest-log4j.job ${MACHINE_AGENT_HOME}/
+#ADD portal-log4j.job ${MACHINE_AGENT_HOME}/
+#ADD processor-log4j.job ${MACHINE_AGENT_HOME}/
+#ADD rest-log4j.job ${MACHINE_AGENT_HOME}/
 
 RUN export TERM=${TERM:-dumb}
 

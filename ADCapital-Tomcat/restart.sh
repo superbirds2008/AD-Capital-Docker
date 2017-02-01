@@ -1,8 +1,8 @@
 #!/bin/sh
 source /env.sh
 
-# Kill running Tomcat process (started via sudo -u appdynamics)
-PID=`pgrep -f 'sudo.*Bootstrap.*'`
+# Kill running Tomcat process
+PID=`pgrep -f '.*Bootstrap.*'`
 kill ${PID}
 sleep 10
 

@@ -4,28 +4,28 @@ source /env.sh
 MACHINE_NAME=ADCapital-QueueReader
 
 # Configure App Server Agent using controller-info.xml
-sed -i "s/<controller-host>/<controller-host>${CONTROLLER}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
-sed -i "s/<controller-port>/<controller-port>${APPD_PORT}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
-sed -i "s/<account-access-key>/<account-access-key>${ACCESS_KEY}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
-sed -i "s/<application-name>/<application-name>${APP_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
-sed -i "s/<tier-name>/<tier-name>${TIER_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
-sed -i "s/<node-name>/<node-name>${NODE_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<controller-host>/<controller-host>${CONTROLLER}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<controller-port>/<controller-port>${APPD_PORT}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<account-access-key>/<account-access-key>${ACCESS_KEY}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<application-name>/<application-name>${APP_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<tier-name>/<tier-name>${TIER_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
+#sed -i "s/<node-name>/<node-name>${NODE_NAME}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
 # Uncomment for multi-tenant controllers
 # sed -i "s/<account-name>/<account-name>${ACCOUNT_NAME%%_*}/g" /${CATALINA_HOME}/appagent/conf/controller-info.xml
 
 # Configure Machine Agent using controller-info.xml
-sed -i "s/<controller-host>/<controller-host>${CONTROLLER}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<controller-port>/<controller-port>${APPD_PORT}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<account-access-key>/<account-access-key>${ACCESS_KEY}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<application-name>/<application-name>${APP_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<tier-name>/<tier-name>${TIER_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<node-name>/<node-name>${NODE_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
-sed -i "s/<machine-path>/<machine-path>${MACHINE_PATH_1}|${MACHINE_PATH_2}|${MACHINE_NAME}/g" ${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<controller-host>/<controller-host>${CONTROLLER}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<controller-port>/<controller-port>${APPD_PORT}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<account-access-key>/<account-access-key>${ACCESS_KEY}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<application-name>/<application-name>${APP_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<tier-name>/<tier-name>${TIER_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<node-name>/<node-name>${NODE_NAME}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
+#sed -i "s/<machine-path>/<machine-path>${MACHINE_PATH_1}|${MACHINE_PATH_2}|${MACHINE_NAME}/g" ${MACHINE_AGENT_HOME}/conf/controller-info.xml
 # Uncomment for multi-tenant controllers
 # sed -i "s/<account-name>/<account-name>${ACCOUNT_NAME%%_*}/g" /${MACHINE_AGENT_HOME}/conf/controller-info.xml
 
 # Enable Analytics
-start-analytics
+#start-analytics
 
 # Install Universal Agent
 ${UA_INSTALL}/ua4.3.0.0/bin/install.sh -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
@@ -43,7 +43,7 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 # Start App Server Agent
 echo JMX_OPTS: ${JMX_OPTS}
 cd ${CATALINA_HOME}/bin;
-java ${JMX_OPTS} -jar ${CLIENT_HOME}/QueueReader.jar > tomcat-startup.out 2>&1 
+java ${JMX_OPTS} -jar ${CLIENT_HOME}/QueueReader.jar > tomcat-startup.out 2>&1 &
 
 # Start Tomcat with App Server Agent
 #echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};

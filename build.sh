@@ -87,8 +87,6 @@ buildContainers() {
 if [[ $1 == *--help* ]]
 then
   echo "Specify agent locations: build.sh
-          -a <Path to App Server Agent>
-          -m <Path to Machine Agent>
           -u <Path to Universal Agent>
           [-j <Path to Oracle JDK7>]
           [-b <Path to local AD-Capital build>]
@@ -104,20 +102,8 @@ then
   promptForAgents
 else
   # Allow user to specify locations of App Server and Analytics Agents
-  while getopts "a:m:j:b:l:p:t:u:" opt; do
+  while getopts "j:b:l:p:t:u:" opt; do
     case $opt in
-      a)
-        APP_SERVER_AGENT=$OPTARG
-        if [ ! -e ${APP_SERVER_AGENT} ]; then
-          echo "Not found: ${APP_SERVER_AGENT}"; exit
-        fi
-        ;;
-      m)
-        MACHINE_AGENT=$OPTARG 
-	if [ ! -e ${MACHINE_AGENT} ]; then
-          echo "Not found: ${MACHINE_AGENT}"; exit         
-        fi
-        ;;
       u)
         UNIVERSAL_AGENT=$OPTARG
         if [ ! -e ${UNIVERSAL_AGENT} ]; then
@@ -156,14 +142,6 @@ else
   done
 fi
 
-if [ -z ${APP_SERVER_AGENT} ]; then
-    echo "Error: App Server Agent is required"; exit
-fi
-
-if [ -z ${MACHINE_AGENT} ]; then
-    echo "Error: Analytics Agent is required"; exit
-fi
-
 if [ "${LOCAL_BUILD}" = true ]; then
   if [ ! -d ${LOCAL_BUILD_PATH} ]; then
     echo "Error: ${LOCAL_BUILD_PATH} does not exist"; exit
@@ -186,16 +164,6 @@ fi
 cp start-analytics.sh ADCapital-Tomcat
 cp start-analytics.sh ADCapital-ApplicationProcessor
 cp start-analytics.sh ADCapital-QueueReader
-
-# Add machine agent to build
-cp ${MACHINE_AGENT} ADCapital-Tomcat/MachineAgent.zip
-cp ${MACHINE_AGENT} ADCapital-ApplicationProcessor/MachineAgent.zip
-cp ${MACHINE_AGENT} ADCapital-QueueReader/MachineAgent.zip
-
-# Add App Server Agent to build
-cp ${APP_SERVER_AGENT} ADCapital-Tomcat/AppServerAgent.zip
-cp ${APP_SERVER_AGENT} ADCapital-ApplicationProcessor/AppServerAgent.zip
-cp ${APP_SERVER_AGENT} ADCapital-QueueReader/AppServerAgent.zip
 
 # Add Universal Agent to build
 cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip

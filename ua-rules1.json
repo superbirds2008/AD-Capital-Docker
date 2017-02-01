@@ -1,0 +1,107 @@
+{
+ "name": "AD-Capital",
+ "comments": "Agents for AD-Capital",
+ "config": {},
+ "rules": [
+   {
+     "name": "rest-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent for rest container",
+     "config":
+     {
+       "version": "4.2.11.0",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "network_hostname == 'AD-Capital-rest'"
+   },
+   {
+     "name": "portal-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent for portal container",
+     "config":
+     {
+       "version": "4.2.10.1",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "network_hostname == 'AD-Capital-portal'"
+   },
+   {
+     "name": "processor-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent for processor container",
+     "config":
+     {
+       "version": "4.2.12.1",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "network_hostname == 'AD-Capital-processor'"
+   },
+   {
+     "name": "queuereader-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent for queuereader container",
+     "config":
+     {
+       "version": "4.2.9.2",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "network_hostname == 'AD-Capital-queuereader'"
+   },
+   {
+     "name": "verification-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent for verification container",
+     "config":
+     {
+       "version": "4.3.0.0",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "network_hostname == 'AD-Capital-verification'"
+   },
+   {
+     "name": "default-java-rule",
+     "monitor": "java",
+     "comments": "Update Java Agent to 4.3.0.0",
+     "config":
+     {
+       "version": "4.3.0.0",
+       "state": "attached",
+       "application_name": "$javaenv_APP_NAME",
+       "tier_name": "$javaenv_TIER_NAME",
+       "node_name": "$javaenv_NODE_NAME",
+       "deploy_cmd": ".*jmxremote.*"
+     },
+     "condition": "True"
+   },
+   {
+     "name": "Universal Agent rule",
+     "monitor": "universal",
+     "comments": "Update Universal Agent to 4.3.0.0",
+     "config": {
+       "state": "started",
+       "version": "4.3.0.0"
+     },
+     "condition": "True"
+   }
+ ]
+}
