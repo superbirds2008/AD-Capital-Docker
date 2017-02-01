@@ -31,10 +31,8 @@ cleanUp() {
 trap cleanUp EXIT
 
 promptForAgents() {
-  read -e -p "Enter path to App Server Agent: " APP_SERVER_AGENT
-  read -e -p "Enter path to Machine Agent (zip): " MACHINE_AGENT
-  read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
   read -e -p "Enter path to Universal Agent: " UNIVERSAL_AGENT
+  read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
 
 buildContainers() {
