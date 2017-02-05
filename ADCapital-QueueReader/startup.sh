@@ -27,6 +27,10 @@ MACHINE_NAME=ADCapital-QueueReader
 # Enable Analytics
 #start-analytics
 
+echo "export APP_NAME="${APP_NAME} > /etc/sysconfig/appdynamics-universal-agent
+echo "export NODE_NAME="${NODE_NAME} >> /etc/sysconfig/appdynamics-universal-agent
+echo "export TIER_NAME="${TIER_NAME} >> /etc/sysconfig/appdynamics-universal-agent
+
 # Install Universal Agent
 ${UA_INSTALL}/ua4.3.0.0/bin/install.sh -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
 
