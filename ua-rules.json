@@ -45,7 +45,7 @@
          "global_account_name": "customer1_6eaf683a-7951-4e97-82f5-838221992646",
          "account_access_key": "d1c0396e-5166-4309-9c28-55a9bc6e0cb6",
          "events_services_host": "master-saas-controller.e2e.appd-test.com",
-         "events_services_port": "8090",
+         "events_services_port": "9080",
          "deploy_in": [ "machine-4.3.0.1" ],
          "props": { "http.event.error.retryAttempts": "500" },
          "force_recycle": "false"
