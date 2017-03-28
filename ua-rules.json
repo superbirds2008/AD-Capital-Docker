@@ -32,7 +32,28 @@
       "condition": "True"
    },
    {
-     "name": "Universal Agent rule",
+      "name": "analytics-4.3.0.1",
+      "monitor": "analytics",
+      "comments": "Start Analytics monitor",
+      "config":
+      {
+         "mode": "machine-agent",
+         "state": "started",
+         "controller_host": "master-saas-controller.e2e.appd-test.com",
+         "controller_port": "8090",
+         "account_name": "customer1",
+         "global_account_name": "customer1_6eaf683a-7951-4e97-82f5-838221992646",
+         "account_access_key": "d1c0396e-5166-4309-9c28-55a9bc6e0cb6",
+         "events_services_host": "master-saas-controller.e2e.appd-test.com",
+         "events_services_port": "8090",
+         "deploy_in": [ "machine-4.3.0.1" ],
+         "props": { "http.event.error.retryAttempts": "500" },
+         "force_recycle": "false"
+      },
+      "condition": "True"
+   },
+   {
+     "name": "universal-4.4.0.0",
      "monitor": "universal",
      "comments": "Update Universal Agent to 4.4.0.0",
      "config": {
