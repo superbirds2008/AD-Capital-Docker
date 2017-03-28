@@ -32,7 +32,7 @@ echo "export NODE_NAME="${NODE_NAME} >> /etc/sysconfig/appdynamics-universal-age
 echo "export TIER_NAME="${TIER_NAME} >> /etc/sysconfig/appdynamics-universal-agent
 
 # Install Universal Agent
-${UA_INSTALL}/ua4.3.0.0/bin/install.sh -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
+${UA_INSTALL}/ua4.4.0.0/bin/install.sh --controller_host ${CONTROLLER} --controller_port ${APPD_PORT} --account_name ${ACCOUNT_NAME%%_*} --account_access_key ${ACCESS_KEY}
 
 # Set LD_PRELOAD and add jre/lib/ext/tools.jar before starting agent JVMs
 #/opt/appdynamics/universal-agent/ua --enable-ldpreload
