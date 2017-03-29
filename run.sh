@@ -61,3 +61,10 @@ echo -n "queuereader: "; docker run --name queuereader -h ${APP_NAME}-queuereade
 
 echo -n "adcapitalload: "; docker run --name=adcapitalload --link portal:portal --link processor:processor -d appdynamics/adcapital-load
 
+echo -n "monitor: "; docker run --name=monitor -h ${APP_NAME}-monitor \
+        -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+        -e NODE_NAME=${APP_NAME}_MONITORING -e APP_NAME=$APP_NAME -e TIER_NAME=Docker-Monitoring \
+        -e MACHINE_PATH_1=${MACHINE_PATH_1} -e MACHINE_PATH_2=${MACHINE_PATH_2} \
+        -d appdynamics/adcapital-monitor:$VERSION
+

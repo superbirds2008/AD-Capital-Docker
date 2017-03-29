@@ -18,6 +18,7 @@ cleanUp() {
     (cd ADCapital-QueueReader && rm -rf AD-Capital)
     (cd ADCapital-Load && rm -rf AD-Capital-Load load-generator.zip)
     (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
+    (cd ADCapital-Monitor && rm -f MachineAgent.zip env.sh)
   fi
 
   # Remove dangling images left-over from build

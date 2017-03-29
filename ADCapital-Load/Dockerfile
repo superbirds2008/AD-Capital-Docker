@@ -13,6 +13,9 @@ ENV LOAD_GEN_HOME /AD-Capital-Load
 RUN cd /AD-Capital-Load; gradle distZip
 RUN unzip AD-Capital-Load/build/distributions/load-generator.zip -d /
 RUN chmod +x $LOAD_GEN_HOME/bin/*
+
 ADD env.sh /
 ADD startup.sh /
-CMD ["/bin/bash","/startup.sh"]
+RUN chmod +x /startup.sh
+
+CMD ["/bin/bash", "-c", "/startup.sh"]
