@@ -32,6 +32,7 @@ trap cleanUp EXIT
 
 promptForAgents() {
   read -e -p "Enter path to Universal Agent: " UNIVERSAL_AGENT
+  read -e -p "Enter path to Machine Agent (zip): " MACHINE_AGENT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
 
@@ -79,6 +80,9 @@ buildContainers() {
     (cp ${LOCAL_LOAD_BUILD_PATH}/build/distributions/load-generator.zip ADCapital-Load)
     (cd ADCapital-Load && docker build -f Dockerfile.local -t appdynamics/adcapital-load .) || exit $?
   fi
+
+  echo; echo "Building ADCapital-Monitor..."
+  (cd ADCapital-Monitor && docker build -t appdynamics/adcapital-monitor .) || exit $?
 }
 
 # Usage information
@@ -86,6 +90,7 @@ if [[ $1 == *--help* ]]
 then
   echo "Specify agent locations: build.sh
           -u <Path to Universal Agent>
+          -m <Path to Machine Agent>
           [-j <Path to Oracle JDK7>]
           [-b <Path to local AD-Capital build>]
           [-l <Path to local AD-Capital-Load build>]
@@ -100,12 +105,18 @@ then
   promptForAgents
 else
   # Allow user to specify locations of App Server and Analytics Agents
-  while getopts "j:b:l:p:t:u:" opt; do
+  while getopts "j:b:l:p:t:u:m:" opt; do
     case $opt in
       u)
         UNIVERSAL_AGENT=$OPTARG
         if [ ! -e ${UNIVERSAL_AGENT} ]; then
           echo "Not found: ${UNIVERSAL_AGENT}"; exit
+        fi
+        ;;
+      m)
+        MACHINE_AGENT=$OPTARG 
+	if [ ! -e ${MACHINE_AGENT} ]; then
+          echo "Not found: ${MACHINE_AGENT}"; exit         
         fi
         ;;
       j)
@@ -168,10 +179,14 @@ cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
 cp ${UNIVERSAL_AGENT} ADCapital-ApplicationProcessor/UniversalAgent.zip
 cp ${UNIVERSAL_AGENT} ADCapital-QueueReader/UniversalAgent.zip
 
+# Add machine agent to build
+cp ${MACHINE_AGENT} ADCapital-Monitor/MachineAgent.zip
+
 # Add common environment to build
 cp env.sh ADCapital-Tomcat
 cp env.sh ADCapital-ApplicationProcessor
 cp env.sh ADCapital-QueueReader
+cp env.sh ADCapital-Monitor
 
 # Skip build if -p flag (Prepare only) set
 if [ "${PREPARE_ONLY}" = true ] ; then
