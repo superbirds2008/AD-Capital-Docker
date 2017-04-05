@@ -36,7 +36,7 @@ RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
 
 ENV CLIENT_HOME /opt/applicationprocessor
 
-RUN export TERM=${TERM:-dumb}
+RUN export TERM=${TERM:-xterm}
 
 # Copy AD-Capital project from build dir
 ADD AD-Capital /AD-Capital

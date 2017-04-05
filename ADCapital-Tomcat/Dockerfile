@@ -39,7 +39,7 @@ RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
 #ADD processor-log4j.job ${MACHINE_AGENT_HOME}/
 #ADD rest-log4j.job ${MACHINE_AGENT_HOME}/
 
-RUN export TERM=${TERM:-dumb}
+RUN export TERM=${TERM:-xterm}
 
 # Copy AD-Capital project from build dir
 ADD AD-Capital /AD-Capital

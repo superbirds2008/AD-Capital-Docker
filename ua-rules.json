@@ -14,51 +14,18 @@
        "application_name": "$javaenv_APP_NAME",
        "tier_name": "$javaenv_TIER_NAME",
        "node_name": "$javaenv_NODE_NAME",
-       "deploy_cmd": ".*jmxremote.*"
+       "deploy_cmd": ".*jmxremote.*",
+       "additional_props": "appdynamics.analytics.agent.url=http://localhost:9090/v2/sinks/bt"
      },
      "condition": "True"
    },
    {
-      "name": "machine-4.3.0.1",
-      "monitor": "machine",
-      "comments": "Update Machine Agent to 4.3.0.1",
-      "config": {
-        "state": "started",
-        "version": "4.3.0.1",
-        "application_name": "$env_APP_NAME",
-        "tier_name": "$env_TIER_NAME",
-        "node_name": "$env_NODE_NAME"
-      },
-      "condition": "True"
-   },
-   {
-      "name": "analytics-4.3.0.1",
-      "monitor": "analytics",
-      "comments": "Start Analytics monitor",
-      "config":
-      {
-         "mode": "machine-agent",
-         "state": "started",
-         "controller_host": "master-saas-controller.e2e.appd-test.com",
-         "controller_port": "8090",
-         "account_name": "customer1",
-         "global_account_name": "customer1_6eaf683a-7951-4e97-82f5-838221992646",
-         "account_access_key": "d1c0396e-5166-4309-9c28-55a9bc6e0cb6",
-         "events_services_host": "master-saas-controller.e2e.appd-test.com",
-         "events_services_port": "9080",
-         "deploy_in": [ "machine-4.3.0.1" ],
-         "props": { "http.event.error.retryAttempts": "500" },
-         "force_recycle": "false"
-      },
-      "condition": "True"
-   },
-   {
-     "name": "universal-4.4.0.0",
+     "name": "universal-4.3.0.1",
      "monitor": "universal",
-     "comments": "Update Universal Agent to 4.4.0.0",
+     "comments": "Update Universal Agent to 4.3.0.1",
      "config": {
        "state": "started",
-       "version": "4.4.0.0"
+       "version": "4.3.0.1"
      },
      "condition": "True"
    }

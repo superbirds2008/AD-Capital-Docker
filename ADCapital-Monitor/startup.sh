@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 source /env.sh
 
 # Configure Machine Agent using controller-info.xml
@@ -18,6 +18,19 @@ sed -i "s/-Dappdynamics/jmxremote/g" ${MACHINE_AGENT_HOME}/extensions/DockerMoni
 # Enable SIM and Docker Monitoring via system properties
 export SIM_PROPERTIES="-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true"
 
+# Configure analytics-agent.properties
+aaprop=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/analytics-agent.properties
+sed -i "/^ad.agent.name=/c\ad.agent.name=http:\/\/${APP_NAME}-analytics" ${aaprop}
+sed -i "/^appdynamics.agent.uniqueHostId=/c\appdynamics.agent.uniqueHostId=${APP_NAME}-host" ${aaprop}
+sed -i "/^ad.controller.url=/c\ad.controller.url=http:\/\/${CONTROLLER}:${APPD_PORT}" ${aaprop}
+sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
+sed -i "/^http.event.accountName=/c\http.event.accountName=${ACCOUNT_NAME}" ${aaprop}
+sed -i "/^http.event.accessKey=/c\http.event.accessKey=${ACCESS_KEY}" ${aaprop}
+
+# Configure monitor.xml
+monxml=${MACHINE_AGENT_HOME}/monitors/analytics-agent/monitor.xml
+sed -i 's#<enabled>false</enabled>#<enabled>true</enabled>#g' ${monxml}
+
 # Start Machine Agent
 echo MACHINE_AGENT_JAVA_OPTS: ${MACHINE_AGENT_JAVA_OPTS}
 echo JMX_OPTS: ${JMX_OPTS}
@@ -25,4 +38,4 @@ java ${MACHINE_AGENT_JAVA_OPTS} ${SIM_PROPERTIES} -jar ${MACHINE_AGENT_HOME}/mac
 
 # Start rsyslog and tail
 service rsyslog start
-tail -f /var/log/messages
+tail -f /var/log/syslog
