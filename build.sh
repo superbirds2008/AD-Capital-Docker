@@ -10,11 +10,11 @@
 
 cleanUp() {
   if [ -z ${PREPARE_ONLY} ]; then 
-    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
+    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat-*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
     (cd ADCapital-Tomcat && rm -rf AD-Capital)
-    (cd ADCapital-ApplicationProcessor && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz Verification.jar UniversalAgent.zip)
+    (cd ADCapital-ApplicationProcessor && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat-*.tar.gz Verification.jar UniversalAgent.zip)
     (cd ADCapital-ApplicationProcessor && rm -rf AD-Capital)
-    (cd ADCapital-QueueReader && rm -f AppServerAgent.zip MachineAgent.zip env.sh start-analytics.sh apache-tomcat-*.tar.gz QueueReader.jar UniversalAgent.zip)
+    (cd ADCapital-QueueReader && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat-*.tar.gz QueueReader.jar UniversalAgent.zip)
     (cd ADCapital-QueueReader && rm -rf AD-Capital)
     (cd ADCapital-Load && rm -rf AD-Capital-Load load-generator.zip)
     (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
@@ -169,11 +169,6 @@ else
     echo "Using JDK: ${ORACLE_JDK7}"
     cp ${ORACLE_JDK7} ADCapital-Java/jdk-linux-x64.rpm
 fi
-
-# Add Analytics config to build
-cp start-analytics.sh ADCapital-Tomcat
-cp start-analytics.sh ADCapital-ApplicationProcessor
-cp start-analytics.sh ADCapital-QueueReader
 
 # Add Universal Agent to build
 cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip

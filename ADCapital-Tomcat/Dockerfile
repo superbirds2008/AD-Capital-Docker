@@ -11,6 +11,8 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 ENV TOMCAT_MAJOR_VERSION 8
 ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
+
+# Environment vars: Universal Agent
 ENV UA_INSTALL /ua
 ENV UA_HOME /opt/appdynamics/universal-agent
 
@@ -32,12 +34,7 @@ RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
 # Universal Agent Install
 ADD UniversalAgent.zip /
-RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL};rm /UniversalAgent.zip
-
-# Add Log Analytics job files
-#ADD portal-log4j.job ${MACHINE_AGENT_HOME}/
-#ADD processor-log4j.job ${MACHINE_AGENT_HOME}/
-#ADD rest-log4j.job ${MACHINE_AGENT_HOME}/
+RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL}; rm /UniversalAgent.zip
 
 RUN export TERM=${TERM:-xterm}
 
@@ -54,8 +51,6 @@ ADD restart.sh /usr/bin/restart
 RUN chmod 744 /usr/bin/restart
 ADD ua-debug.sh /usr/bin/ua-debug
 RUN chmod 744 /usr/bin/ua-debug
-ADD start-analytics.sh /usr/bin/start-analytics
-RUN chmod 744 /usr/bin/start-analytics
 
 # Note: This command should not return or the container will exit
 CMD "/startup.sh"

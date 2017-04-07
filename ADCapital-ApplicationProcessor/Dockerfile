@@ -51,8 +51,6 @@ ADD restart.sh /usr/bin/restart
 RUN chmod 744 /usr/bin/restart
 ADD ua-debug.sh /usr/bin/ua-debug
 RUN chmod 744 /usr/bin/ua-debug
-ADD start-analytics.sh /usr/bin/start-analytics
-RUN chmod 744 /usr/bin/start-analytics
 
 # Note: This command should not return or the container will exit
 CMD "/startup.sh"
