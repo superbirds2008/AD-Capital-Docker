@@ -56,9 +56,8 @@ echo -n "queuereader: "; docker run --name queuereader -h ${APP_NAME}-queuereade
 
 echo -n "adcapitalload: "; docker run --name=adcapitalload --link portal:portal --link processor:processor -d appdynamics/adcapital-load
 
-echo -n "monitor: "; sudo docker run --name=monitor \
-        --net=host --volume=/:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
-        -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
-        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
-        -e APP_NAME=${APP_NAME} -e NODE_NAME=${APP_NAME}_MONITORING -e TIER_NAME=Docker-Monitoring \
+echo -n "monitor: "; docker run --name=monitor -h ${APP_NAME}-monitor -p 9090:9090 \
+        --volume=/:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
+        -e APPD_ACCOUNT_NAME=${APPD_ACCOUNT_NAME} -e APPD_ACCESS_KEY=${APPD_ACCESS_KEY} \
+        -e APPD_HOST=${APPD_HOST} -e APPD_PORT=${APPD_PORT} -e APPD_SSL_ENABLED=${APPD_SSL_ENABLED} \
         -d appdynamics/adcapital-monitor:$VERSION

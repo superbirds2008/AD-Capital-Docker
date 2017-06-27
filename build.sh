@@ -18,7 +18,7 @@ cleanUp() {
     (cd ADCapital-QueueReader && rm -rf AD-Capital)
     (cd ADCapital-Load && rm -rf AD-Capital-Load load-generator.zip)
     (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
-    (cd ADCapital-Monitor && rm -f MachineAgent.zip env.sh)
+    (cd ADCapital-Monitor && rm -f machine-agent.zip env.sh)
   fi
 
   # Remove dangling images left-over from build
@@ -176,7 +176,7 @@ cp ${UNIVERSAL_AGENT} ADCapital-ApplicationProcessor/UniversalAgent.zip
 cp ${UNIVERSAL_AGENT} ADCapital-QueueReader/UniversalAgent.zip
 
 # Add machine agent to build
-cp ${MACHINE_AGENT} ADCapital-Monitor/MachineAgent.zip
+cp ${MACHINE_AGENT} ADCapital-Monitor/machine-agent.zip
 
 # Add common environment to build
 cp env.sh ADCapital-Tomcat

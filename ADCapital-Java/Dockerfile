@@ -2,6 +2,12 @@ FROM centos:centos6
 
 RUN yum -y install unzip
 RUN yum -y install tar
+RUN yum -y install wget
+
+ENV DOCKERIZE_VERSION v0.5.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Install Oracle JDK
 ADD jdk-linux-x64.rpm /

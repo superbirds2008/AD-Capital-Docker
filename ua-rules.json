@@ -4,12 +4,12 @@
  "config": {},
  "rules": [
    {
-     "name": "java-4.3.0.1",
+     "name": "java-4.3.3.0",
      "monitor": "java",
-     "comments": "Update Java Agent to 4.3.0.1",
+     "comments": "Update Java Agent to 4.3.3.0",
      "config":
      {
-       "version": "4.3.0.1",
+       "version": "4.3.3.0",
        "state": "attached",
        "application_name": "$javaenv_APP_NAME",
        "tier_name": "$javaenv_TIER_NAME",
@@ -20,12 +20,12 @@
      "condition": "True"
    },
    {
-     "name": "universal-4.3.0.1",
+     "name": "universal-4.3.3.0",
      "monitor": "universal",
-     "comments": "Update Universal Agent to 4.3.0.1",
+     "comments": "Update Universal Agent to 4.3.3.0",
      "config": {
        "state": "started",
-       "version": "4.3.0.1"
+       "version": "4.3.3.0"
      },
      "condition": "True"
    }

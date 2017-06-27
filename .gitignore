@@ -12,3 +12,5 @@ jdk-*.rpm
 #ignore Tomcat distro files
 *.tar.gz
 
+#ignore MacOS 
+*.DS_Store

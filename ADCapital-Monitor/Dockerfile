@@ -1,34 +1,24 @@
 FROM ubuntu:14.04
+
+# Install required packages
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y  software-properties-common && \
-    add-apt-repository ppa:webupd8team/java -y && \
-    apt-get update && \
-    echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get install -y oracle-java8-installer && \
+    apt-get install -y unzip && \
     apt-get clean
-RUN apt-get install -y vim
-RUN apt-get install -y curl
-RUN apt-get install -y zip
-RUN apt-get install -y rsyslog
 
-# Zip Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine-agent
-ADD MachineAgent.zip /
-RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
+# Install AppDynamics Machine Agent
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent/
+ADD machine-agent.zip /tmp/ 
+RUN mkdir -p ${MACHINE_AGENT_HOME} && \
+    unzip -oq /tmp/machine-agent.zip -d ${MACHINE_AGENT_HOME} && \
+    rm /tmp/machine-agent.zip
 
-# Workaround for bug https://singularity.jira.com/browse/PEM-99
-RUN (cd ${MACHINE_AGENT_HOME}/monitors; mv analytics-agent-bundle-32bit-windows analytics-agent; rm -rf analytics-agent/jre)
+# Include start script to configure and start MA at runtime
+ADD start-appdynamics ${MACHINE_AGENT_HOME}
+RUN chmod 744 ${MACHINE_AGENT_HOME}/start-appdynamics
 
-RUN export TERM=${TERM:-xterm}
-
-ADD env.sh /
-ADD startup.sh /
-RUN chmod 744 /startup.sh
-
-# Note: This command should not return or the container will exit
-CMD "/startup.sh"
+# Configure and Run AppDynamics Machine Agent
+CMD "${MACHINE_AGENT_HOME}/start-appdynamics"
 
 # Analytics Agent listener
 EXPOSE 9090
