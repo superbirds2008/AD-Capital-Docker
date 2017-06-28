@@ -26,8 +26,11 @@ UA_VER=$(cd ${UA_INSTALL}; ls -d ua*)
 cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
 # Check service dependencies
-dockerize -wait tcp://adcapitaldb:3306 -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-dockerize -wait tcp://rest:8080 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+dockerize -wait tcp://adcapitaldb:3306 \
+          -wait tcp://rabbitmq:5672 \
+          -wait tcp://rabbitmq:15672 \
+          -wait tcp://rest:8080 \
+          -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
 # Start Tomcat Server
 cd ${CATALINA_HOME}/bin;

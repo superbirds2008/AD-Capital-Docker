@@ -42,11 +42,16 @@ if [ -n "${rest}" ]; then
         cd /AD-Capital; gradle createDB
   fi
 elif [ -n "${portal}" ]; then
-  dockerize -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-  dockerize -wait tcp://rest:8080 -wait-retry-interval 30s -timeout 90s || exit $?
+  dockerize -wait tcp://rabbitmq:5672 \
+            -wait tcp://rabbitmq:15672 \
+            -wait tcp://rest:8080 \
+            -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 elif [ -n "${processor}" ]; then
-  dockerize -wait tcp://adcapitaldb:3306 -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-  dockerize -wait tcp://rest:8080 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+  dockerize -wait tcp://adcapitaldb:3306 \
+            -wait tcp://rabbitmq:5672 \
+            -wait tcp://rabbitmq:15672 \
+            -wait tcp://rest:8080 \
+            -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 fi
 
 # Start Tomcat
