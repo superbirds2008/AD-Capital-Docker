@@ -37,21 +37,20 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
 # Service dependencies
 if [ -n "${rest}" ]; then
-  dockerize -wait tcp://adcapitaldb:3306 -wait-retry-interval 10s -timeout 30s
+  dockerize -wait tcp://adcapitaldb:3306 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
   if [ "${create_schema}" == "true" ]; then
         cd /AD-Capital; gradle createDB
   fi
 elif [ -n "${portal}" ]; then
-  dockerize -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval 10s -timeout 30s
-  dockerize -wait tcp://rest:8080 -wait-retry-interval 30s -timeout 30s
+  dockerize -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+  dockerize -wait tcp://rest:8080 -wait-retry-interval 30s -timeout 90s || exit $?
 elif [ -n "${processor}" ]; then
-  dockerize -wait tcp://adcapitaldb:3306 -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval 10s -timeout 30s
-  dockerize -wait tcp://rest:8080 -wait-retry-interval 30s -timeout 30s
+  dockerize -wait tcp://adcapitaldb:3306 -wait tcp://rabbitmq:5672 -wait tcp://rabbitmq:15672 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+  dockerize -wait tcp://rest:8080 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 fi
 
 # Start Tomcat
 cd ${CATALINA_HOME}/bin;
-#java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap > tomcat-startup.out 2>&1 &
 java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
 
 # Start rsyslog and tail

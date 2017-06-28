@@ -1,5 +1,6 @@
 # Do not check in personal env variables
 env-*.sh
+*.env
 
 # Agent download sub-dirs
 3.*/**

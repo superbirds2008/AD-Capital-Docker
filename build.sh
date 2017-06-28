@@ -10,7 +10,7 @@
 
 cleanUp() {
   if [ -z ${PREPARE_ONLY} ]; then 
-    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat-*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
+    (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
     (cd ADCapital-Tomcat && rm -rf AD-Capital)
     (cd ADCapital-ApplicationProcessor && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat-*.tar.gz Verification.jar UniversalAgent.zip)
     (cd ADCapital-ApplicationProcessor && rm -rf AD-Capital)

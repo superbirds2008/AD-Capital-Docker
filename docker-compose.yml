@@ -31,17 +31,12 @@ services:
     image: appdynamics/adcapital-tomcat
     logging:
       driver: "none"
+    env_file: ./docker-compose.env
     environment:
     - "rest=true"
     - "create_schema=true"
-    - "ACCOUNT_NAME=${ACCOUNT_NAME}"
-    - "ACCESS_KEY=${ACCESS_KEY}"
-    - "CONTROLLER=${CONTR_HOST}"
-    - "APPD_PORT=${CONTR_PORT}"
-    - "APP_NAME=${APP_NAME}"
-    - "NODE_NAME=${APP_NAME}_REST_NODE"
-    - "TIER_NAME=Authentication-Services"
-    - "EVENT_ENDPOINT=${EVENT_ENDPOINT}"
+    - "APPD_NODE_NAME=Rest"
+    - "APPD_TIER_NAME=Authentication-Services"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -54,16 +49,11 @@ services:
     image: appdynamics/adcapital-tomcat
     logging:
       driver: "none"
+    env_file: ./docker-compose.env
     environment:
     - "portal=true"
-    - "ACCOUNT_NAME=${ACCOUNT_NAME}"
-    - "ACCESS_KEY=${ACCESS_KEY}"
-    - "CONTROLLER=${CONTR_HOST}"
-    - "APPD_PORT=${CONTR_PORT}"
-    - "APP_NAME=${APP_NAME}"
-    - "NODE_NAME=${APP_NAME}_PORTAL_NODE"
-    - "TIER_NAME=Portal-Services"
-    - "EVENT_ENDPOINT=${EVENT_ENDPOINT}"
+    - "APPD_NODE_NAME=Portal"
+    - "APPD_TIER_NAME=Portal-Services"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -74,17 +64,12 @@ services:
     container_name: verification
     hostname: verification
     image: appdynamics/adcapital-applicationprocessor
-    logging:
-      driver: "none"
+#    logging:
+#      driver: "none"
+    env_file: ./docker-compose.env
     environment:
-    - "ACCOUNT_NAME=${ACCOUNT_NAME}"
-    - "ACCESS_KEY=${ACCESS_KEY}"
-    - "CONTROLLER=${CONTR_HOST}"
-    - "APPD_PORT=${CONTR_PORT}"
-    - "APP_NAME=${APP_NAME}"
-    - "NODE_NAME=${APP_NAME}_VERIFICATION_NODE"
-    - "TIER_NAME=ApplicationProcessor-Service"
-    - "EVENT_ENDPOINT=${EVENT_ENDPOINT}"
+    - "APPD_NODE_NAME=Verification"
+    - "APPD_TIER_NAME=ApplicationProcessor-Service"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -97,16 +82,11 @@ services:
     image: appdynamics/adcapital-tomcat
     logging:
       driver: "none"
+    env_file: ./docker-compose.env
     environment:
     - "processor=true"
-    - "ACCOUNT_NAME=${ACCOUNT_NAME}"
-    - "ACCESS_KEY=${ACCESS_KEY}"
-    - "CONTROLLER=${CONTR_HOST}"
-    - "APPD_PORT=${CONTR_PORT}"
-    - "APP_NAME=${APP_NAME}"
-    - "NODE_NAME=${APP_NAME}_PROCESSOR_NODE"
-    - "TIER_NAME=LoanProcessor-Services"
-    - "EVENT_ENDPOINT=${EVENT_ENDPOINT}"
+    - "APPD_NODE_NAME=Processor"
+    - "APPD_TIER_NAME=LoanProcessor-Services"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -117,15 +97,12 @@ services:
     container_name: queuereader
     hostname: queuereader
     image: appdynamics/adcapital-queuereader
+#    logging:
+#      driver: "none"
+    env_file: ./docker-compose.env
     environment:
-    - "ACCOUNT_NAME=${ACCOUNT_NAME}"
-    - "ACCESS_KEY=${ACCESS_KEY}"
-    - "CONTROLLER=${CONTR_HOST}"
-    - "APPD_PORT=${CONTR_PORT}"
-    - "APP_NAME=${APP_NAME}"
-    - "NODE_NAME=${APP_NAME}_QUEUEREADER_NODE"
-    - "TIER_NAME=Queuereader-Services"
-    - "EVENT_ENDPOINT=${EVENT_ENDPOINT}"
+    - "APPD_NODE_NAME=Queuereader"
+    - "APPD_TIER_NAME=Queuereader-Services"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -136,6 +113,7 @@ services:
     container_name: adcapitalload
     hostname: adcapitalload
     image: appdynamics/adcapital-load
+    env_file: ./docker-compose.env
     depends_on: 
     - "portal"
     - "processor"
@@ -146,12 +124,7 @@ services:
 #    image: appdynamics/adcapital-monitor
 #    logging:
 #      driver: "none"
-#    environment:
-#    - "APPD_ACCOUNT_NAME=${ACCOUNT_NAME}"
-#    - "APPD_ACCESS_KEY=${ACCESS_KEY}"
-#    - "APPD_HOST=${CONTR_HOST}"
-#    - "APPD_PORT=${CONTR_PORT}"
-#    - "APPD_SSL_ENABLED=false"
+#    env-file: ./docker-compose.env
 #    depends_on: 
 #    - "rest"
 #    - "portal"
