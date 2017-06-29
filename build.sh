@@ -37,7 +37,6 @@ buildContainers() {
   (cd ADCapital-Tomcat && docker build -t appdynamics/adcapital-tomcat .) || exit $?
 
   echo; echo "Building ADCapital-Load..."
-  (cd ADCapital-Load && git clone https://github.com/Appdynamics/AD-Capital-Load.git) || exit $?
   (cd ADCapital-Load && docker build -t appdynamics/adcapital-load .) || exit $?
 
   echo; echo "Building ADCapital-Monitor..."
@@ -88,8 +87,6 @@ fi
 
 # Add Universal Agent to build
 cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
-cp ${UNIVERSAL_AGENT} ADCapital-ApplicationProcessor/UniversalAgent.zip
-cp ${UNIVERSAL_AGENT} ADCapital-QueueReader/UniversalAgent.zip
 
 # Add machine agent to build
 cp ${MACHINE_AGENT} ADCapital-Monitor/machine-agent.zip

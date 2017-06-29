@@ -7,8 +7,10 @@ RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
-# Add AD-Capital-Load project from build dir
-ADD AD-Capital-Load /AD-Capital-Load
+# Clone source repo from GitHub
+RUN yum install -y git
+RUN git clone https://github.com/Appdynamics/AD-Capital-Load.git
+
 ENV LOAD_GEN_HOME /AD-Capital-Load
 RUN cd /AD-Capital-Load; gradle distZip
 RUN unzip AD-Capital-Load/build/distributions/load-generator.zip -d /
