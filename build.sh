@@ -6,7 +6,18 @@
 
 #! /bin/bash
 
+# Usage information
+if [[ $1 == *--help* ]]; then
+  echo "Specify agent locations: build.sh
+          -u <Path to Universal Agent>
+          -m <Path to Machine Agent>
+          [-j <Path to Oracle JDK7>]"
+  echo "Prompt for agent locations: build.sh"
+  exit 0
+fi
+
 cleanUp() {
+  # Remove AppDyanmics installers and Oracle JDK
   (cd ADCapital-Tomcat && rm -f UniversalAgent.zip)
   (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
   (cd ADCapital-Monitor && rm -f machine-agent.zip)
@@ -32,30 +43,27 @@ buildContainers() {
   (cd ADCapital-Java; docker build -t appdynamics/adcapital-java .) || exit $?
 
   echo; echo "Building ADCapital-Tomcat..."
+  cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
   (cd ADCapital-Tomcat && docker build -t appdynamics/adcapital-tomcat .) || exit $?
 
   echo; echo "Building ADCapital-Load..."
   (cd ADCapital-Load && docker build -t appdynamics/adcapital-load .) || exit $?
 
   echo; echo "Building ADCapital-Monitor..."
+  cp ${MACHINE_AGENT} ADCapital-Monitor/machine-agent.zip
   (cd ADCapital-Monitor && docker build -t appdynamics/adcapital-monitor .) || exit $?
+
+  echo; echo "Building ADCapital-Project..."
+  (cd ADCapital-Project && docker build -t appdynamics/adcapital-project .) || exit $?
 }
 
-# Usage information
-if [[ $1 == *--help* ]]; then
-  echo "Specify agent locations: build.sh
-          -u <Path to Universal Agent>
-          -m <Path to Machine Agent>
-          [-j <Path to Oracle JDK7>]"
-  echo "Prompt for agent locations: build.sh"
-  exit 0
-fi
 
-# Prompt for location of Agents
 if  [ $# -eq 0 ]; then
+  # Default: Prompt user for locations of AppDynamics Agents
   promptForAgents
+
 else
-  # Allow user to specify locations of AppDynamics Agents
+  # Allow user to specify locations of AppDynamics Agents via commandline
   while getopts "j:u:m:" opt; do
     case $opt in
       u)
@@ -81,12 +89,7 @@ else
         ;;
     esac
   done
+
 fi
-
-# Add Universal Agent to build
-cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
-
-# Add machine agent to build
-cp ${MACHINE_AGENT} ADCapital-Monitor/machine-agent.zip
 
 buildContainers

@@ -1,14 +1,14 @@
 version: '3'
 
 volumes:
-  binaries:
+  project:
 
 services:
-  binaries:
-    container_name: binaries
-    image: appdynamics/adcapital-binaries
+  project:
+    container_name: project
+    image: appdynamics/adcapital-project
     volumes:
-    - binaries:/src
+    - project:/src
 
   adcapitaldb:
     container_name: adcapitaldb
@@ -39,7 +39,7 @@ services:
     hostname: rest
     image: appdynamics/adcapital-tomcat
     volumes: 
-    - binaries:/src
+    - project:/src
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -58,7 +58,7 @@ services:
     hostname: portal
     image: appdynamics/adcapital-tomcat
     volumes: 
-    - binaries:/src
+    - project:/src
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -77,7 +77,7 @@ services:
     hostname: verification
     image: appdynamics/adcapital-tomcat
     volumes: 
-    - binaries:/src
+    - project:/src
     env_file: ./docker-compose.env
     environment:
     - "ROLE=verification"
@@ -94,7 +94,7 @@ services:
     hostname: processor
     image: appdynamics/adcapital-tomcat
     volumes: 
-    - binaries:/src
+    - project:/src
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -113,7 +113,7 @@ services:
     hostname: queuereader
     image: appdynamics/adcapital-tomcat
     volumes:
-    - binaries:/src
+    - project:/src
     env_file: ./docker-compose.env
     environment:
     - "ROLE=queuereader"
