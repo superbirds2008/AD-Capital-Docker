@@ -36,13 +36,8 @@ RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 ADD UniversalAgent.zip /
 RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL}; rm /UniversalAgent.zip
 
-RUN export TERM=${TERM:-xterm}
-
-# Copy AD-Capital project from build dir
-#ADD AD-Capital /AD-Capital
-
-# Gradle build
-#RUN cd /AD-Capital;gradle build;
+# Shared directory mounted as docker volume
+ENV PROJECT /src
 
 ADD env.sh /
 ADD startup.sh /

@@ -12,10 +12,10 @@ RUN yum install -y git
 RUN git clone https://github.com/Appdynamics/AD-Capital.git
 
 # Gradle build
-RUN cd /AD-Capital; gradle build
-RUN cd /AD-Capital; gradle uberjar
+RUN cd /AD-Capital; gradle build uberjar
 
-ENV BINARIES /adcapital
+# Shared directory mounted as docker volume
+ENV PROJECT /src
 
 ADD startup.sh /
 RUN chmod 744 /startup.sh

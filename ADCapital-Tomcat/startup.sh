@@ -2,16 +2,13 @@
 source /env.sh
 
 if [ -n "${rest}" ]; then
-    cp  /adcapital/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
-#    cp  /adcapital/Rest.war /tomcat/webapps;
+    cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
 
 elif [ -n "${portal}" ]; then
-    cp /adcapital/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
-#    cp /adcapital/portal.war /tomcat/webapps;
+    cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
 
 elif [ -n "${processor}" ]; then
-    cp /adcapital/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
-#    cp /adcapital/processor.war /tomcat/webapps;
+    cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
 fi
 
 echo "export APP_NAME="${APP_NAME} > /etc/sysconfig/appdynamics-universal-agent
@@ -40,9 +37,10 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
 # Service dependencies
 if [ -n "${rest}" ]; then
-  dockerize -wait tcp://adcapitaldb:3306 -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+  dockerize -wait tcp://adcapitaldb:3306 \
+            -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
   if [ "${create_schema}" == "true" ]; then
-        cd /adcapital/AD-Capital; gradle createDB
+        cd /${PROJECT}/AD-Capital; gradle createDB
   fi
 elif [ -n "${portal}" ]; then
   dockerize -wait tcp://rabbitmq:5672 \
