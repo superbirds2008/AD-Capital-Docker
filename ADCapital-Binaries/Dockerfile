@@ -1,0 +1,23 @@
+FROM appdynamics/adcapital-java:latest
+
+# Install Gradle
+RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
+RUN unzip gradle-2.1-bin.zip -d /opt/
+RUN rm gradle-2.1-bin.zip
+ENV GRADLE_HOME /opt/gradle-2.1
+ENV PATH $PATH:$GRADLE_HOME/bin
+
+# Clone source repo from GitHub
+RUN yum install -y git
+RUN git clone https://github.com/Appdynamics/AD-Capital.git
+
+# Gradle build
+RUN cd /AD-Capital; gradle build
+RUN cd /AD-Capital; gradle uberjar
+
+ENV BINARIES /adcapital
+
+ADD startup.sh /
+RUN chmod 744 /startup.sh
+
+CMD "/startup.sh"

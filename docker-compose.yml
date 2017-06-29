@@ -1,6 +1,15 @@
 version: '3'
 
+volumes:
+  binaries:
+
 services:
+  binaries:
+    container_name: binaries
+    image: appdynamics/adcapital-binaries
+    volumes:
+    - binaries:/adcapital
+
   adcapitaldb:
     container_name: adcapitaldb
     hostname: adcapitaldb
@@ -29,6 +38,8 @@ services:
     container_name: rest
     hostname: rest
     image: appdynamics/adcapital-tomcat
+    volumes: 
+    - binaries:/adcapital
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -47,6 +58,8 @@ services:
     container_name: portal
     hostname: portal
     image: appdynamics/adcapital-tomcat
+    volumes: 
+    - binaries:/adcapital
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -64,8 +77,6 @@ services:
     container_name: verification
     hostname: verification
     image: appdynamics/adcapital-applicationprocessor
-#    logging:
-#      driver: "none"
     env_file: ./docker-compose.env
     environment:
     - "APPD_NODE_NAME=Verification"
@@ -80,6 +91,8 @@ services:
     container_name: processor
     hostname: processor
     image: appdynamics/adcapital-tomcat
+    volumes: 
+    - binaries:/adcapital
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -97,8 +110,6 @@ services:
     container_name: queuereader
     hostname: queuereader
     image: appdynamics/adcapital-queuereader
-#    logging:
-#      driver: "none"
     env_file: ./docker-compose.env
     environment:
     - "APPD_NODE_NAME=Queuereader"

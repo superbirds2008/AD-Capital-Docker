@@ -39,10 +39,10 @@ RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL}; rm /UniversalAgent.zip
 RUN export TERM=${TERM:-xterm}
 
 # Copy AD-Capital project from build dir
-ADD AD-Capital /AD-Capital
+#ADD AD-Capital /AD-Capital
 
 # Gradle build
-RUN cd /AD-Capital;gradle build;
+#RUN cd /AD-Capital;gradle build;
 
 ADD env.sh /
 ADD startup.sh /
