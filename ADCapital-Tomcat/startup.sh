@@ -1,16 +1,6 @@
 #!/bin/sh
 source /env.sh
 
-if [ -n "${rest}" ]; then
-    cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
-
-elif [ -n "${portal}" ]; then
-    cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
-
-elif [ -n "${processor}" ]; then
-    cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
-fi
-
 echo "export APP_NAME="${APP_NAME} > /etc/sysconfig/appdynamics-universal-agent
 echo "export NODE_NAME="${NODE_NAME} >> /etc/sysconfig/appdynamics-universal-agent
 echo "export TIER_NAME="${TIER_NAME} >> /etc/sysconfig/appdynamics-universal-agent
@@ -39,25 +29,53 @@ cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 if [ -n "${rest}" ]; then
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-  if [ "${create_schema}" == "true" ]; then
-        cd /${PROJECT}/AD-Capital; gradle createDB
-  fi
+  cd /${PROJECT}/AD-Capital; gradle createDB
+
+  cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
+  cd ${CATALINA_HOME}/bin;
+  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+
 elif [ -n "${portal}" ]; then
   dockerize -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+  
+  cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
+  cd ${CATALINA_HOME}/bin;
+  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+
 elif [ -n "${processor}" ]; then
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-fi
 
-# Start Tomcat
-cd ${CATALINA_HOME}/bin;
-java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+  cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
+  cd ${CATALINA_HOME}/bin;
+  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+
+elif [ -n "${queuereader}" ]; then
+  dockerize -wait tcp://rabbitmq:5672 \
+            -wait tcp://rabbitmq:15672 \
+            -wait tcp://rest:8080 \
+            -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+
+  cd ${CATALINA_HOME}/bin;
+  java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/QueueReader/build/libs/QueueReader.jar &
+
+elif [ -n "verification" ]; then
+  dockerize -wait tcp://adcapitaldb:3306 \
+            -wait tcp://rabbitmq:5672 \
+            -wait tcp://rabbitmq:15672 \
+            -wait tcp://rest:8080 \
+            -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+
+  cd ${CATALINA_HOME}/bin;
+  java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/Verification/build/libs/Verification.jar &
+
+fi
 
 # Start rsyslog and tail
 service rsyslog start 

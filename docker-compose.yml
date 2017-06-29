@@ -76,9 +76,12 @@ services:
   verification:
     container_name: verification
     hostname: verification
-    image: appdynamics/adcapital-applicationprocessor
+    image: appdynamics/adcapital-tomcat
+    volumes: 
+    - binaries:/src
     env_file: ./docker-compose.env
     environment:
+    - "verification=true"
     - "APPD_NODE_NAME=Verification"
     - "APPD_TIER_NAME=ApplicationProcessor-Service"
     depends_on: 
@@ -109,9 +112,12 @@ services:
   queuereader:
     container_name: queuereader
     hostname: queuereader
-    image: appdynamics/adcapital-queuereader
+    image: appdynamics/adcapital-tomcat
+    volumes:
+    - binaries:/src
     env_file: ./docker-compose.env
     environment:
+    - "queuereader=true"
     - "APPD_NODE_NAME=Queuereader"
     - "APPD_TIER_NAME=Queuereader-Services"
     depends_on: 
