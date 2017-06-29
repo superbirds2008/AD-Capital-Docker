@@ -39,7 +39,6 @@ RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL}; rm /UniversalAgent.zip
 # Shared directory mounted as docker volume
 ENV PROJECT /src
 
-ADD env.sh /
 ADD startup.sh /
 RUN chmod 744 /startup.sh
 ADD restart.sh /usr/bin/restart

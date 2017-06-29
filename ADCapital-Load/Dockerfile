@@ -11,12 +11,11 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 RUN yum install -y git
 RUN git clone https://github.com/Appdynamics/AD-Capital-Load.git
 
-ENV LOAD_GEN_HOME /AD-Capital-Load
-RUN cd /AD-Capital-Load; gradle distZip
-RUN unzip AD-Capital-Load/build/distributions/load-generator.zip -d /
-RUN chmod +x $LOAD_GEN_HOME/bin/*
+ENV LOAD_GEN_PROJECT /AD-Capital-Load
+RUN cd ${LOAD_GEN_PROJECT}; gradle distZip
+RUN unzip ${LOAD_GEN_PROJECT}/build/distributions/load-generator.zip -d /
+RUN chmod +x ${LOAD_GEN_PROJECT}/bin/*
 
-ADD env.sh /
 ADD startup.sh /
 RUN chmod +x /startup.sh
 

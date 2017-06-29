@@ -1,12 +1,18 @@
 #!/bin/sh
-source /env.sh
+
+if [ -z "${APPD_APP_NAME}" ]; then echo "APPD_APP_NAME not defined"; fi
+if [ -z "${APPD_NODE_NAME}" ]; then echo "APPD_NODE_NAME not defined"; fi
+if [ -z "${APPD_TIER_NAME}" ]; then echo "APPD_TIER_NAME not defined"; fi
 
 echo "export APP_NAME="${APP_NAME} > /etc/sysconfig/appdynamics-universal-agent
 echo "export NODE_NAME="${NODE_NAME} >> /etc/sysconfig/appdynamics-universal-agent
 echo "export TIER_NAME="${TIER_NAME} >> /etc/sysconfig/appdynamics-universal-agent
 
+export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
 # Handle version string in UA install path
-UA_VER=$(cd ${UA_INSTALL}; ls -d ua*)
+#UA_VER=$(cd ${UA_INSTALL}; ls -d ua*)
+#export UA_CONFIG=${UA_HOME}/conf/universalagent.yaml
 
 # Install Universal Agent
 # Commandline flag format changed between 4.3 and 4.4

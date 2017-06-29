@@ -7,11 +7,9 @@
 #! /bin/bash
 
 cleanUp() {
-  (cd ADCapital-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip env.sh apache-tomcat*.tar.gz Rest.war portal.war processor.war UniversalAgent.zip)
-  (cd ADCapital-Tomcat && rm -rf AD-Capital)
-  (cd ADCapital-Load && rm -rf AD-Capital-Load load-generator.zip)
+  (cd ADCapital-Tomcat && rm -f UniversalAgent.zip)
   (cd ADCapital-Java && rm -f jdk-linux-x64.rpm)
-  (cd ADCapital-Monitor && rm -f machine-agent.zip env.sh)
+  (cd ADCapital-Monitor && rm -f machine-agent.zip)
 
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]; then
@@ -57,7 +55,7 @@ fi
 if  [ $# -eq 0 ]; then
   promptForAgents
 else
-  # Allow user to specify locations of App Server and Analytics Agents
+  # Allow user to specify locations of AppDynamics Agents
   while getopts "j:u:m:" opt; do
     case $opt in
       u)
@@ -90,9 +88,5 @@ cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
 
 # Add machine agent to build
 cp ${MACHINE_AGENT} ADCapital-Monitor/machine-agent.zip
-
-# Add common environment to build
-cp env.sh ADCapital-Tomcat
-cp env.sh ADCapital-Monitor
 
 buildContainers
