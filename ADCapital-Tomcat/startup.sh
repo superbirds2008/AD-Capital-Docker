@@ -31,17 +31,18 @@ export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.
 #. /opt/appdynamics/universal-agent/ua_preload.sh
 cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
-# Service dependencies
-if [ -n "${rest}" ]; then
+case ${ROLE} in
+rest)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
+
   cd /${PROJECT}/AD-Capital; gradle createDB
 
   cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
-
-elif [ -n "${portal}" ]; then
+  ;;
+portal)
   dockerize -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
@@ -50,8 +51,8 @@ elif [ -n "${portal}" ]; then
   cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
-
-elif [ -n "${processor}" ]; then
+  ;;
+processor)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
@@ -61,8 +62,8 @@ elif [ -n "${processor}" ]; then
   cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
-
-elif [ -n "${queuereader}" ]; then
+  ;;
+queuereader)
   dockerize -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
@@ -70,8 +71,8 @@ elif [ -n "${queuereader}" ]; then
 
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/QueueReader/build/libs/QueueReader.jar &
-
-elif [ -n "verification" ]; then
+  ;;
+verification)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
@@ -80,8 +81,11 @@ elif [ -n "verification" ]; then
 
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/Verification/build/libs/Verification.jar &
-
-fi
+  ;;
+*)
+  echo "ROLE missing: container will exit"; exit 1
+  ;;
+esac
 
 # Start rsyslog and tail
 service rsyslog start 

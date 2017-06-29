@@ -44,10 +44,9 @@ services:
       driver: "none"
     env_file: ./docker-compose.env
     environment:
-    - "rest=true"
-    - "create_schema=true"
+    - "ROLE=rest"
     - "APPD_NODE_NAME=Rest"
-    - "APPD_TIER_NAME=Authentication-Services"
+    - "APPD_TIER_NAME=Authentication-Service"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -64,9 +63,9 @@ services:
       driver: "none"
     env_file: ./docker-compose.env
     environment:
-    - "portal=true"
+    - "ROLE=portal"
     - "APPD_NODE_NAME=Portal"
-    - "APPD_TIER_NAME=Portal-Services"
+    - "APPD_TIER_NAME=Portal-Service"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -81,9 +80,9 @@ services:
     - binaries:/src
     env_file: ./docker-compose.env
     environment:
-    - "verification=true"
+    - "ROLE=verification"
     - "APPD_NODE_NAME=Verification"
-    - "APPD_TIER_NAME=ApplicationProcessor-Service"
+    - "APPD_TIER_NAME=Verification-Service"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"
@@ -100,7 +99,7 @@ services:
       driver: "none"
     env_file: ./docker-compose.env
     environment:
-    - "processor=true"
+    - "ROLE=processor"
     - "APPD_NODE_NAME=Processor"
     - "APPD_TIER_NAME=LoanProcessor-Services"
     depends_on: 
@@ -117,7 +116,7 @@ services:
     - binaries:/src
     env_file: ./docker-compose.env
     environment:
-    - "queuereader=true"
+    - "ROLE=queuereader"
     - "APPD_NODE_NAME=Queuereader"
     - "APPD_TIER_NAME=Queuereader-Services"
     depends_on: 
