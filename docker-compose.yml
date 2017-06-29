@@ -45,6 +45,7 @@ services:
     env_file: ./docker-compose.env
     environment:
     - "ROLE=rest"
+    - "QUIET=true"
     - "APPD_NODE_NAME=Rest"
     - "APPD_TIER_NAME=Authentication-Service"
     depends_on: 
@@ -64,6 +65,7 @@ services:
     env_file: ./docker-compose.env
     environment:
     - "ROLE=portal"
+    - "QUIET=true"
     - "APPD_NODE_NAME=Portal"
     - "APPD_TIER_NAME=Portal-Service"
     depends_on: 
@@ -81,6 +83,7 @@ services:
     env_file: ./docker-compose.env
     environment:
     - "ROLE=verification"
+    - "QUIET=true"
     - "APPD_NODE_NAME=Verification"
     - "APPD_TIER_NAME=Verification-Service"
     depends_on: 
@@ -100,6 +103,7 @@ services:
     env_file: ./docker-compose.env
     environment:
     - "ROLE=processor"
+    - "QUIET=true"
     - "APPD_NODE_NAME=Processor"
     - "APPD_TIER_NAME=LoanProcessor-Services"
     depends_on: 
@@ -108,17 +112,18 @@ services:
     ports:
     - "8084:8080"
 
-  queuereader:
-    container_name: queuereader
-    hostname: queuereader
+  approval:
+    container_name: approval
+    hostname: approval
     image: appdynamics/adcapital-tomcat
     volumes:
     - project:/src
     env_file: ./docker-compose.env
     environment:
-    - "ROLE=queuereader"
-    - "APPD_NODE_NAME=Queuereader"
-    - "APPD_TIER_NAME=Queuereader-Services"
+    - "ROLE=approval"
+    - "QUIET=true"
+    - "APPD_NODE_NAME=Approval"
+    - "APPD_TIER_NAME=Approval-Services"
     depends_on: 
     - "adcapitaldb"
     - "rabbitmq"

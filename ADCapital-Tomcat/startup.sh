@@ -31,6 +31,9 @@ export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.
 #. /opt/appdynamics/universal-agent/ua_preload.sh
 cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
 
+# Specialize container behavior based on ROLE env var
+# Uses https://github.com/jwilder/dockerize to check service dependencies
+# Binaries and Gradle scripts are sourced from ${PROJECT} docker shared volume
 case ${ROLE} in
 rest)
   dockerize -wait tcp://adcapitaldb:3306 \
@@ -63,7 +66,7 @@ processor)
   cd ${CATALINA_HOME}/bin;
   java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
   ;;
-queuereader)
+approval)
   dockerize -wait tcp://rabbitmq:5672 \
             -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
@@ -89,4 +92,8 @@ esac
 
 # Start rsyslog and tail
 service rsyslog start 
-tail -f /var/log/messages 2>&1 > /dev/null
+if [[ ${QUIET} == "true" ]]; then
+  tail -f /var/log/messages 2>&1 > /dev/null
+else
+  tail -f /var/log/messages
+fi
