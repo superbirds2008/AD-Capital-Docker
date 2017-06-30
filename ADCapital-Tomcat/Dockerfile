@@ -12,10 +12,6 @@ ENV TOMCAT_MAJOR_VERSION 8
 ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
-# Environment vars: Universal Agent
-ENV UA_INSTALL /ua
-ENV UA_HOME /opt/appdynamics/universal-agent
-
 # Install rsyslog to tail log file
 RUN yum install -y rsyslog
 
@@ -32,19 +28,11 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
-# Universal Agent Install
-ADD UniversalAgent.zip /
-RUN unzip -q /UniversalAgent.zip -d ${UA_INSTALL}; rm /UniversalAgent.zip
-
 # Shared directory mounted as docker volume
 ENV PROJECT /src
 
 ADD startup.sh /
 RUN chmod 744 /startup.sh
-ADD restart.sh /usr/bin/restart
-RUN chmod 744 /usr/bin/restart
-ADD ua-debug.sh /usr/bin/ua-debug
-RUN chmod 744 /usr/bin/ua-debug
 
 # Note: This command should not return or the container will exit
 CMD "/startup.sh"

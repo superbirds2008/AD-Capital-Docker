@@ -43,7 +43,6 @@ buildContainers() {
   (cd ADCapital-Java; docker build -t appdynamics/adcapital-java .) || exit $?
 
   echo; echo "Building ADCapital-Tomcat..."
-  cp ${UNIVERSAL_AGENT} ADCapital-Tomcat/UniversalAgent.zip
   (cd ADCapital-Tomcat && docker build -t appdynamics/adcapital-tomcat .) || exit $?
 
   echo; echo "Building ADCapital-Load..."
