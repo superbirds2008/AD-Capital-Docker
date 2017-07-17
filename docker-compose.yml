@@ -145,17 +145,3 @@ services:
     depends_on: 
     - "portal"
     - "processor"
-
-#  monitor:
-#    container_name: monitor
-#    hostname: monitor
-#    image: appdynamics/adcapital-monitor
-#    logging:
-#      driver: "none"
-#    env-file: ./docker-compose.env
-#    depends_on: 
-#    - "rest"
-#    - "portal"
-#    - "processor"
-#    - "queuereader"
-#    - "verification"

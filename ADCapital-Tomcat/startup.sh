@@ -1,11 +1,13 @@
 #!/bin/bash
 
-export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
-
 # Add AppDynamics Agent properties if shared volume is mounted
+# APPD_JAVAAGENT and APPD_PROPERTIES environment variables will be set
 if [ -e ${APPD_DIR}/appdynamics.sh ]; then
   . ${APPD_DIR}/appdynamics.sh 
 fi
+
+# Uncomment and expose port 8888 to enable JMX remote monitoring
+#export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
 # Specialize container behavior based on ROLE env var
 # Uses https://github.com/jwilder/dockerize to check service dependencies

@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  appdynamics:
+    external: true
+
+services:
+  monitor:
+    container_name: monitor
+    hostname: monitor
+    build:
+      context: .
+      args:
+        APPD_MA_ZIP: 
+        APPD_MA_SHA256:
+    image: appdynamics/appdynamics-monitor
+    logging:
+      driver: "none"
+    env_file: ../docker-compose.env
