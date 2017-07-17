@@ -1,35 +1,11 @@
-#!/bin/sh
-
-if [ -z "${APPD_APP_NAME}" ]; then echo "APPD_APP_NAME not defined"; fi
-if [ -z "${APPD_NODE_NAME}" ]; then echo "APPD_NODE_NAME not defined"; fi
-if [ -z "${APPD_TIER_NAME}" ]; then echo "APPD_TIER_NAME not defined"; fi
-
-echo "export APP_NAME="${APP_NAME} > /etc/sysconfig/appdynamics-universal-agent
-echo "export NODE_NAME="${NODE_NAME} >> /etc/sysconfig/appdynamics-universal-agent
-echo "export TIER_NAME="${TIER_NAME} >> /etc/sysconfig/appdynamics-universal-agent
+#!/bin/bash
 
 export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
-# Handle version string in UA install path
-#UA_VER=$(cd ${UA_INSTALL}; ls -d ua*)
-#export UA_CONFIG=${UA_HOME}/conf/universalagent.yaml
-
-# Install Universal Agent
-# Commandline flag format changed between 4.3 and 4.4
-#if [[ ${UA_VER} =~ ua4\.4.* ]]; then
-#  ${UA_INSTALL}/${UA_VER}/bin/install.sh \
-#    --controller_host ${CONTROLLER} --controller_port ${APPD_PORT} \
-#    --account_name ${ACCOUNT_NAME%%_*} --account_access_key ${ACCESS_KEY}
-#elif [[ ${UA_VER} =~ ua4\.3.* ]]; then
-#  ${UA_INSTALL}/${UA_VER}/bin/install.sh \
-#    -controller_host ${CONTROLLER} -controller_port ${APPD_PORT} \
-#    -account_name ${ACCOUNT_NAME%%_*} -account_access_key ${ACCESS_KEY}
-#fi
-
-# Set LD_PRELOAD and add jre/lib/ext/tools.jar before starting agent JVMs
-#/opt/appdynamics/universal-agent/ua --enable-ldpreload
-#. /opt/appdynamics/universal-agent/ua_preload.sh
-cp ${JAVA_HOME}/lib/tools.jar ${JAVA_HOME}/jre/lib/ext/tools.jar
+# Add AppDynamics Agent properties if shared volume is mounted
+if [ -e ${APPD_DIR}/appdynamics.sh ]; then
+  . ${APPD_DIR}/appdynamics.sh 
+fi
 
 # Specialize container behavior based on ROLE env var
 # Uses https://github.com/jwilder/dockerize to check service dependencies

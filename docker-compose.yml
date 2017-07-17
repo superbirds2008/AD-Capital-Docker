@@ -2,6 +2,8 @@ version: '3'
 
 volumes:
   project:
+  appdynamics:
+    external: true
 
 services:
   project:
@@ -40,6 +42,7 @@ services:
     image: appdynamics/adcapital-tomcat
     volumes: 
     - project:/src
+    - appdynamics:/appdynamics
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -60,6 +63,7 @@ services:
     image: appdynamics/adcapital-tomcat
     volumes: 
     - project:/src
+    - appdynamics:/appdynamics
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -80,6 +84,7 @@ services:
     image: appdynamics/adcapital-tomcat
     volumes: 
     - project:/src
+    - appdynamics:/appdynamics
     env_file: ./docker-compose.env
     environment:
     - "ROLE=verification"
@@ -98,6 +103,7 @@ services:
     image: appdynamics/adcapital-tomcat
     volumes: 
     - project:/src
+    - appdynamics:/appdynamics
     logging:
       driver: "none"
     env_file: ./docker-compose.env
@@ -118,6 +124,7 @@ services:
     image: appdynamics/adcapital-tomcat
     volumes:
     - project:/src
+    - appdynamics:/appdynamics
     env_file: ./docker-compose.env
     environment:
     - "ROLE=approval"
