@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  java-base:
+    build:
+      context: .
+      args:
+        ORACLE_JDK_RPM: 
+        ORACLE_JDK_SHA256: 
+    image: appdynamics/adcapital-java
+

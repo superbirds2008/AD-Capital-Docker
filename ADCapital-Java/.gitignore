@@ -1,0 +1,7 @@
+# Agent binaries and checksums
+*.rpm
+*.zip
+*.sha256
+
+# Personal environment settings
+*.yml.*
