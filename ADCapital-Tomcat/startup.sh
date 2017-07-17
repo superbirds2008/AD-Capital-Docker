@@ -21,7 +21,7 @@ rest)
 
   cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
-  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+  java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
   ;;
 portal)
   dockerize -wait tcp://rabbitmq:5672 \
@@ -31,7 +31,7 @@ portal)
   
   cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
-  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+  java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
   ;;
 processor)
   dockerize -wait tcp://adcapitaldb:3306 \
@@ -42,7 +42,7 @@ processor)
 
   cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
   cd ${CATALINA_HOME}/bin;
-  java ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
+  java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap &
   ;;
 approval)
   dockerize -wait tcp://rabbitmq:5672 \
@@ -51,7 +51,7 @@ approval)
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
   cd ${CATALINA_HOME}/bin;
-  java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/QueueReader/build/libs/QueueReader.jar &
+  java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/QueueReader/build/libs/QueueReader.jar &
   ;;
 verification)
   dockerize -wait tcp://adcapitaldb:3306 \
@@ -61,7 +61,7 @@ verification)
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
   cd ${CATALINA_HOME}/bin;
-  java ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/Verification/build/libs/Verification.jar &
+  java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -jar ${PROJECT}/AD-Capital/Verification/build/libs/Verification.jar &
   ;;
 *)
   echo "ROLE missing: container will exit"; exit 1
@@ -70,8 +70,4 @@ esac
 
 # Start rsyslog and tail
 service rsyslog start 
-if [[ ${QUIET} == "true" ]]; then
-  tail -f /var/log/messages 2>&1 > /dev/null
-else
-  tail -f /var/log/messages
-fi
+tail -f /var/log/messages 2>&1 > /dev/null 
