@@ -19,9 +19,9 @@ if [ -z "${APPD_APP_NAME}" ]; then echo "APPD_APP_NAME not defined" && exit; fi
 if [ -z "${APPD_NODE_NAME}" ]; then echo "APPD_NODE_NAME not defined" && exit; fi
 if [ -z "${APPD_TIER_NAME}" ]; then echo "APPD_TIER_NAME not defined" && exit; fi
 
-# AppDynamics Agent logs wriiten to shared volume
-APPD_LOG_DIR="${APPD_DIR}/logs/$(hostname)"
-mkdir -p ${APPD_LOG_DIR}
+# AppDynamics Agent runtime logs and configuration written to shared volume
+APPD_RUNTIME_DIR="${APPD_DIR}/$(hostname)"
+mkdir -p ${APPD_RUNTIME_DIR}
 
 export APPD_PROPERTIES="\
  -Dappdynamics.controller.hostName=${APPD_CONTR_HOST}\
@@ -32,6 +32,5 @@ export APPD_PROPERTIES="\
  -Dappdynamics.agent.applicationName=${APPD_APP_NAME}\
  -Dappdynamics.agent.tierName=${APPD_TIER_NAME}\
  -Dappdynamics.agent.nodeName=${APPD_NODE_NAME}\
- -Dappdynamics.agent.logs.dir=${APPD_LOG_DIR}"
+ -Dappdynamics.agent.runtime.dir=${APPD_RUNTIME_DIR}"
 echo "APPD_PROPERTIES: ${APPD_PROPERTIES}"
-
