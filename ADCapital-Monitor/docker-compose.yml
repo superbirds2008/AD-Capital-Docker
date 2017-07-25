@@ -18,6 +18,9 @@ services:
       APPD_DOCKER_VISIBILITY:
       APPD_ANALYTICS_MONITOR:
     env_file: ../docker-compose.env
+    volumes:
+      - /:/hostroot:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       
 networks:
   default:
