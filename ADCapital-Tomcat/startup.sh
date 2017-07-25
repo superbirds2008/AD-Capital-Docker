@@ -25,7 +25,6 @@ rest)
   ;;
 portal)
   dockerize -wait tcp://rabbitmq:5672 \
-            -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
   
@@ -36,7 +35,6 @@ portal)
 processor)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait tcp://rabbitmq:5672 \
-            -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
@@ -46,7 +44,6 @@ processor)
   ;;
 approval)
   dockerize -wait tcp://rabbitmq:5672 \
-            -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
@@ -56,7 +53,6 @@ approval)
 verification)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait tcp://rabbitmq:5672 \
-            -wait tcp://rabbitmq:15672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
