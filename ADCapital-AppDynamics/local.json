@@ -1,0 +1,16 @@
+{
+    "name": "default",
+    "config": {
+    },
+    "rules": [
+        {
+            "name": "java-VERSION",
+            "monitor": "java",
+            "config": {
+                "version": "VERSION",
+                "state": "downloaded"
+            },
+            "condition": "True"
+       }
+    ]
+}

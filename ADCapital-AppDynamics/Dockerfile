@@ -1,20 +1,31 @@
-FROM centos:centos6
+FROM centos:centos7
 
 RUN yum -y install unzip
 
 # Actual file paths passed via docker-compose.yml
-ARG APPD_AGENT_ZIP
-ARG APPD_AGENT_SHA256
+ARG APPD_UA_ZIP
+ARG APPD_UA_SHA256
 
 # Canonical filenames used in startup script
-ENV AGENT_ZIP AppServerAgent.zip
-ENV AGENT_SHA256 AppServerAgent.checksum
+ENV UA_ZIP UniversalAgent.zip
+ENV UA_SHA256 UniversalAgent.checksum
+ENV UA_HOME /opt/appdynamics/universal-agent
+ENV UA_INSTALL /ua
 
-ENV APPD_TMP /tmp
+COPY ${APPD_UA_ZIP} /${UA_ZIP}
+RUN echo "${APPD_UA_SHA256} *${UA_ZIP}" >> /$UA_SHA256
+RUN sha256sum -c ${UA_SHA256}
 
-COPY ${APPD_AGENT_ZIP} /${AGENT_ZIP}
-RUN echo "${APPD_AGENT_SHA256} *${AGENT_ZIP}" >> /$AGENT_SHA256
-RUN sha256sum -c ${AGENT_SHA256}
+RUN yum install -y sysvinit-tools
+
+RUN unzip -q /${UA_ZIP} -d ${UA_INSTALL}; rm /${UA_ZIP}
+RUN chmod +x $(find ${UA_INSTALL} -maxdepth 1 -type d -name "ua?.?.?.?")/bin/install.sh
+RUN $(find ${UA_INSTALL} -maxdepth 1 -type d -name "ua?.?.?.?")/bin/install.sh  \
+ -controller_host "HOST" -controller_port "1234" \
+ -account_name "ACCOUNT_NAME" -account_access_key "ACCESS_KEY" -global_account_name "GLOBAL_ACCOUNT_NAME" \
+ -no_service
+RUN ${UA_HOME}/ua --set-mode local
+COPY local.json ${UA_HOME}/rulebook
 
 COPY appdynamics.sh /appdynamics.sh
 
