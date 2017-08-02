@@ -56,6 +56,9 @@ until [ -e ${ANALYTICS_AGENT_MONITOR}/conf/analytics-agent.properties ]; do slee
 
 echo "Downloaded Machine Agent ${APPD_MACHINE_AGENT_VERSION}"
 
+echo "Stopping Universal Agent"
+ps -ef -ww | grep "ua --daemon" | grep -v "grep" | awk '{print $2}' | xargs kill
+
 # See the AppDynamics Product Docs (Standalone Machine Agent Configuration Reference)
 # In this example, environment variables are passed to the container at runtime
 MA_PROPERTIES="-Dappdynamics.controller.hostName=${APPD_CONTR_HOST}"
