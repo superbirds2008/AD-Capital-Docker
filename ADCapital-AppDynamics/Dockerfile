@@ -1,6 +1,6 @@
 FROM centos:centos7
 
-RUN yum -y install unzip
+RUN yum -y install unzip sysvinit-tools && yum clean all
 
 # Actual file paths passed via docker-compose.yml
 ARG APPD_UA_ZIP
@@ -15,8 +15,6 @@ ENV UA_INSTALL /ua
 COPY ${APPD_UA_ZIP} /${UA_ZIP}
 RUN echo "${APPD_UA_SHA256} *${UA_ZIP}" >> /$UA_SHA256
 RUN sha256sum -c ${UA_SHA256}
-
-RUN yum install -y sysvinit-tools
 
 RUN unzip -q /${UA_ZIP} -d ${UA_INSTALL}; rm /${UA_ZIP}
 RUN chmod +x $(find ${UA_INSTALL} -maxdepth 1 -type d -name "ua?.?.?.?")/bin/install.sh
