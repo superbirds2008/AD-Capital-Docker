@@ -4,7 +4,10 @@ AGENT_DOWNLOAD=$UA_HOME/download/monitor/java/${APPD_AGENT_VERSION}/java-${APPD_
 AGENT_MONITOR=$UA_HOME/monitor/java/ver${APPD_AGENT_VERSION}
 MACHINE_AGENT_MONITOR=${UA_HOME}/monitor/machine/${APPD_MACHINE_AGENT_VERSION}/machine-agent
 ANALYTICS_AGENT_MONITOR=${MACHINE_AGENT_MONITOR}/monitors/analytics-agent
+TARGET=
+TIMEOUT=60
 
+# Enable Transaction/Log Analytics and configure Controller/ES endpoints
 configure-analytics(){
   echo "Configuring Analytics Monitor"
   # Configure analytics-agent.properties
@@ -30,58 +33,89 @@ configure-analytics(){
   echo "Analytics Monitor Enabled"
 }
 
-echo "Configuring AppDynamics Universal Agent"
-sed -i "s/     controller_host: HOST/     controller_host: ${APPD_CONTR_HOST}/g" /${UA_HOME}/conf/universalagent.yaml
-sed -i "s/     controller_port: 1234/     controller_port: ${APPD_CONTR_PORT}/g" /${UA_HOME}/conf/universalagent.yaml
-sed -i "s/     account_name: ACCOUNT_NAME/     account_name: ${APPD_ACCOUNT_NAME%%_*}/g" /${UA_HOME}/conf/universalagent.yaml
-sed -i "s/     account_access_key: ACCESS_KEY/     account_access_key: ${APPD_ACCESS_KEY}/g" /${UA_HOME}/conf/universalagent.yaml
-sed -i "s/     global_account_name: GLOBAL_ACCOUNT_NAME/     global_account_name: ${APPD_GLOBAL_ACCOUNT_NAME}/g" /${UA_HOME}/conf/universalagent.yaml
+# Configure and Start the Universal Agent
+start-ua(){
+  echo "Configuring AppDynamics Universal Agent"
+  sed -i "s/     controller_host: HOST/     controller_host: ${APPD_CONTR_HOST}/g" /${UA_HOME}/conf/universalagent.yaml
+  sed -i "s/     controller_port: 1234/     controller_port: ${APPD_CONTR_PORT}/g" /${UA_HOME}/conf/universalagent.yaml
+  sed -i "s/     account_name: ACCOUNT_NAME/     account_name: ${APPD_ACCOUNT_NAME%%_*}/g" /${UA_HOME}/conf/universalagent.yaml
+  sed -i "s/     account_access_key: ACCESS_KEY/     account_access_key: ${APPD_ACCESS_KEY}/g" /${UA_HOME}/conf/universalagent.yaml
+  sed -i "s/     global_account_name: GLOBAL_ACCOUNT_NAME/     global_account_name: ${APPD_GLOBAL_ACCOUNT_NAME}/g" /${UA_HOME}/conf/universalagent.yaml
 
-echo "Starting AppDynamics Universal Agent"
-${UA_HOME}/ua --daemon &
+  echo "Starting AppDynamics Universal Agent"
+  ${UA_HOME}/ua --daemon &
+}
 
-# Configure Universal Agent local rulebook to download required App Server Agent version 
-#sed -i "s/VERSION/${APPD_AGENT_VERSION}/g" ${UA_HOME}/rulebook/local.json
+# Stop the Universal Agent
+stop-ua(){
+  echo "Stopping AppDynamics Universal Agent"
+  ps -ef -ww | grep "ua --daemon" | grep -v "grep" | awk '{print $2}' | xargs kill
+}
 
+download-agent(){
+  timeout=${TIMEOUT}
+  until [ -e ${TARGET} ]; do
+    let timeout=$timeout-1
+    if [ $timeout -eq 0 ]; then 
+      echo "Agent download timed out"
+      exit 1
+    fi
+    sleep 1
+  done
+}
+    
+# Use Universal Agent to download App Server and Machine Agents
+copy-agents(){
 # Test for UA to install to monitor folder to ensure zip download is complete
-until [ -e $AGENT_MONITOR ]; do sleep 1; done
-echo "Downloaded App Server Agent ${APPD_AGENT_VERSION}"
+  TARGET=${AGENT_MONITOR}
+  download-agent
+#  until [ -e $AGENT_MONITOR ]; do sleep 1; done
+  echo "Downloaded App Server Agent ${APPD_AGENT_VERSION}"
 
-echo "Copying App Server Agent ${APPD_AGENT_VERSION} to volume: ${APPD_DIR}"
-rm -rf ${APPD_DIR}/${APPD_AGENT_VERSION} && mkdir -p ${APPD_DIR}/${APPD_AGENT_VERSION}
-unzip -q ${AGENT_DOWNLOAD} -d ${APPD_DIR}/${APPD_AGENT_VERSION}
+  echo "Copying App Server Agent ${APPD_AGENT_VERSION} to volume: ${APPD_DIR}"
+  rm -rf ${APPD_DIR}/${APPD_AGENT_VERSION} && mkdir -p ${APPD_DIR}/${APPD_AGENT_VERSION}
+  unzip -q ${AGENT_DOWNLOAD} -d ${APPD_DIR}/${APPD_AGENT_VERSION}
 
-echo "Copying AppDynamics configuration script to volume: ${APPD_DIR}"
-/bin/cp -f appdynamics.sh ${APPD_DIR}/appdynamics.sh
+  echo "Copying AppDynamics configuration script to volume: ${APPD_DIR}"
+  /bin/cp -f appdynamics.sh ${APPD_DIR}/appdynamics.sh
 
-# Test for UA to install to monitor folder to ensure zip download is complete
-until [ -e ${ANALYTICS_AGENT_MONITOR}/conf/analytics-agent.properties ]; do sleep 1; done
-echo "Downloaded Machine Agent ${APPD_MACHINE_AGENT_VERSION}"
+  # Test for UA to install to monitor folder to ensure zip download is complete
+  until [ -e ${ANALYTICS_AGENT_MONITOR}/conf/analytics-agent.properties ]; do sleep 1; done
+  echo "Downloaded Machine Agent ${APPD_MACHINE_AGENT_VERSION}"
+}
 
-echo "Stopping AppDynamics Universal Agent"
-ps -ef -ww | grep "ua --daemon" | grep -v "grep" | awk '{print $2}' | xargs kill
+# Configure and start Machine Agent
+start-machine-agent(){
+  # In this example, environment variables are passed to the container at runtime
+  # See the AppDynamics Product Docs (Standalone Machine Agent Configuration Reference)
+  MA_PROPERTIES="-Dappdynamics.controller.hostName=${APPD_CONTR_HOST}"
+  MA_PROPERTIES+=" -Dappdynamics.controller.port=${APPD_CONTR_PORT}"
+  MA_PROPERTIES+=" -Dappdynamics.controller.ssl.enabled=${APPD_CONTR_SSL}"
+  MA_PROPERTIES+=" -Dappdynamics.agent.accountName=${APPD_ACCOUNT_NAME%%_*}" 
+  MA_PROPERTIES+=" -Dappdynamics.agent.accountAccessKey=${APPD_ACCESS_KEY}" 
 
-# See the AppDynamics Product Docs (Standalone Machine Agent Configuration Reference)
-# In this example, environment variables are passed to the container at runtime
-MA_PROPERTIES="-Dappdynamics.controller.hostName=${APPD_CONTR_HOST}"
-MA_PROPERTIES+=" -Dappdynamics.controller.port=${APPD_CONTR_PORT}"
-MA_PROPERTIES+=" -Dappdynamics.controller.ssl.enabled=${APPD_CONTR_SSL}"
-MA_PROPERTIES+=" -Dappdynamics.agent.accountName=${APPD_ACCOUNT_NAME%%_*}" 
-MA_PROPERTIES+=" -Dappdynamics.agent.accountAccessKey=${APPD_ACCESS_KEY}" 
+  # Enable SIM and Docker Monitoring
+  if [ "${APPD_DOCKER_VISIBILITY}" == "true" ]; then
+    MA_PROPERTIES+=" -Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true"
+  fi
 
-# Enable SIM and Docker Monitoring
-if [ "${APPD_DOCKER_VISIBILITY}" == "true" ]; then
-  MA_PROPERTIES+=" -Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true"
-fi
+  # Enable Analytics
+  if [ "${APPD_ANALYTICS_MONITOR}" == "true" ]; then
+    configure-analytics
+  fi
 
-# Enable Analytics
-if [ "${APPD_ANALYTICS_MONITOR}" == "true" ]; then
-  configure-analytics
-fi
+  echo "Starting AppDynamics Machine Agent with properties: ${MA_PROPERTIES}"
 
-echo "Starting AppDynamics Machine Agent with properties: ${MA_PROPERTIES}"
+  # Start Machine Agent
+  chmod +x ${MACHINE_AGENT_MONITOR}/jre/bin/java
+  chmod +x ${MACHINE_AGENT_MONITOR}/scripts/*
+  ${MACHINE_AGENT_MONITOR}/jre/bin/java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_MONITOR}/machineagent.jar
+}
 
-# Start Machine Agent
-chmod +x ${MACHINE_AGENT_MONITOR}/jre/bin/java
-chmod +x ${MACHINE_AGENT_MONITOR}/scripts/*
-${MACHINE_AGENT_MONITOR}/jre/bin/java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_MONITOR}/machineagent.jar
+# Use Universal Agent to download App Server and Machine Agents
+start-ua
+copy-agents
+stop-ua
+
+# Start Machine Agent (for Docker Host monitoring)
+start-machine-agent
