@@ -1,10 +1,14 @@
 FROM centos:centos7
 
-RUN yum -y install unzip sysvinit-tools && yum clean all
+#RUN yum -y install unzip sysvinit-tools java-1.8.0-openjdk java-1.8.0-openjdk-devel && yum clean all
+RUN yum -y install unzip sysvinit-tools lsof java-1.8.0-openjdk && yum clean all
 
 # Actual file paths passed via docker-compose.yml
 ARG APPD_UA_ZIP
 ARG APPD_UA_SHA256
+
+# Enable debug for UA
+ARG APPD_UA_DEBUG
 
 # Canonical filenames used in startup script
 ENV UA_ZIP UniversalAgent.zip

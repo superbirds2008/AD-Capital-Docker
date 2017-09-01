@@ -1,11 +1,12 @@
 #!/bin/bash
 
-AGENT_DOWNLOAD=$UA_HOME/download/monitor/java/${APPD_AGENT_VERSION}/java-${APPD_AGENT_VERSION}.zip
-AGENT_MONITOR=$UA_HOME/monitor/java/ver${APPD_AGENT_VERSION}
+AGENT_DOWNLOAD=${UA_HOME}/download/monitor/java/${APPD_AGENT_VERSION}/java-${APPD_AGENT_VERSION}.zip
+MACHINE_AGENT_DOWNLOAD=${UA_HOME}/download/monitor/machine/${APPD_MACHINE_AGENT_VERSION}/machine-${APPD_MACHINE_AGENT_VERSION}-linux.zip
+AGENT_MONITOR=${UA_HOME}/monitor/java/ver${APPD_AGENT_VERSION}
 MACHINE_AGENT_MONITOR=${UA_HOME}/monitor/machine/${APPD_MACHINE_AGENT_VERSION}/machine-agent
 ANALYTICS_AGENT_MONITOR=${MACHINE_AGENT_MONITOR}/monitors/analytics-agent
-TARGET=
-TIMEOUT=60
+TIMEOUT=240
+
 
 # Enable Transaction/Log Analytics and configure Controller/ES endpoints
 configure-analytics(){
@@ -42,6 +43,10 @@ start-ua(){
   sed -i "s/     account_access_key: ACCESS_KEY/     account_access_key: ${APPD_ACCESS_KEY}/g" /${UA_HOME}/conf/universalagent.yaml
   sed -i "s/     global_account_name: GLOBAL_ACCOUNT_NAME/     global_account_name: ${APPD_GLOBAL_ACCOUNT_NAME}/g" /${UA_HOME}/conf/universalagent.yaml
 
+  if [ "${APPD_UA_DEBUG}" == "true" ]; then
+    sed -i "s/    level: INFO/    level: DEBUG/g" /${UA_HOME}/conf/logging.yaml
+  fi
+
   echo "Starting AppDynamics Universal Agent"
   ${UA_HOME}/ua --daemon &
 }
@@ -54,33 +59,61 @@ stop-ua(){
 
 download-agent(){
   timeout=${TIMEOUT}
-  until [ -e ${TARGET} ]; do
+  until [ -e ${AGENT_MONITOR} ]; do
     let timeout=$timeout-1
     if [ $timeout -eq 0 ]; then 
       echo "Agent download timed out"
       exit 1
     fi
-    sleep 1
+    sleep 1;
+  done
+
+  timeout=${TIMEOUT}
+  while [ "$(lsof ${AGENT_DOWNLOAD})" ]; do
+    let timeout=$timeout-1
+    if [ $timeout -eq 0 ]; then
+      echo "Agent download timed out"
+      exit 1
+    fi
+    sleep 1;
   done
 }
-    
+
+download-machine-agent(){
+  timeout=${TIMEOUT}
+  until [ -e ${MACHINE_AGENT_MONITOR} ]; do
+    let timeout=$timeout-1
+    if [ $timeout -eq 0 ]; then 
+      echo "Agent download timed out"
+      exit 1
+    fi
+    sleep 1;
+  done
+
+  timeout=${TIMEOUT}
+  while [ "$(lsof "${MACHINE_AGENT_DOWNLOAD}")" ]; do
+    let timeout=$timeout-1
+    if [ $timeout -eq 0 ]; then
+      echo "Agent download timed out"
+      exit 1
+    fi
+    sleep 1;
+  done
+}
+
 # Use Universal Agent to download App Server and Machine Agents
 copy-agents(){
-# Test for UA to install to monitor folder to ensure zip download is complete
-  TARGET=${AGENT_MONITOR}
   download-agent
-#  until [ -e $AGENT_MONITOR ]; do sleep 1; done
   echo "Downloaded App Server Agent ${APPD_AGENT_VERSION}"
 
-  echo "Copying App Server Agent ${APPD_AGENT_VERSION} to volume: ${APPD_DIR}"
+  echo "Copying App Server Agent to volume: ${APPD_DIR}"
   rm -rf ${APPD_DIR}/${APPD_AGENT_VERSION} && mkdir -p ${APPD_DIR}/${APPD_AGENT_VERSION}
   unzip -q ${AGENT_DOWNLOAD} -d ${APPD_DIR}/${APPD_AGENT_VERSION}
 
   echo "Copying AppDynamics configuration script to volume: ${APPD_DIR}"
   /bin/cp -f appdynamics.sh ${APPD_DIR}/appdynamics.sh
 
-  # Test for UA to install to monitor folder to ensure zip download is complete
-  until [ -e ${ANALYTICS_AGENT_MONITOR}/conf/analytics-agent.properties ]; do sleep 1; done
+  download-machine-agent
   echo "Downloaded Machine Agent ${APPD_MACHINE_AGENT_VERSION}"
 }
 
@@ -106,10 +139,15 @@ start-machine-agent(){
 
   echo "Starting AppDynamics Machine Agent with properties: ${MA_PROPERTIES}"
 
-  # Start Machine Agent
-  chmod +x ${MACHINE_AGENT_MONITOR}/jre/bin/java
+  # Set permissions for MA scripts
   chmod +x ${MACHINE_AGENT_MONITOR}/scripts/*
-  ${MACHINE_AGENT_MONITOR}/jre/bin/java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_MONITOR}/machineagent.jar
+
+  export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre/bin
+  export PATH=$PATH:$JAVA_HOME/bin
+  export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+
+  # Start Machine Agent
+  java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_MONITOR}/machineagent.jar
 }
 
 # Use Universal Agent to download App Server and Machine Agents

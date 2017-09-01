@@ -27,8 +27,3 @@ RUN sha256sum -c ${JDK_SHA256}
 
 # Install Oracle JDK
 RUN rpm -Uvh /${JDK_RPM} && rm ${JDK_RPM}
-
-# Add appdynamics:appdynamics user
-RUN groupadd -r -g 2002 appdynamics
-RUN useradd --create-home --gid appdynamics -u 2001 appdynamics
-RUN echo 'appdynamics:appdynamics' | chpasswd

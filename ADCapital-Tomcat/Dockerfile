@@ -26,7 +26,6 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
     && rm apache-tomcat-*.tar.gz* \
     && mv apache-tomcat-${TOMCAT_MINOR_VERSION} ${CATALINA_HOME}
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
-RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
 # Shared directory mounted as docker volume
 ENV PROJECT /src
