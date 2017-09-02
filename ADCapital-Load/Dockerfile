@@ -1,5 +1,7 @@
 FROM appdynamics/adcapital-java:latest
 
+RUN yum install -y git java-1.8.0-openjdk-devel && yum clean all
+
 # Gradle
 RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip gradle-2.1-bin.zip -d /opt/
@@ -8,7 +10,6 @@ ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
 # Clone source repo from GitHub
-RUN yum install -y git
 RUN git clone https://github.com/Appdynamics/AD-Capital-Load.git
 
 ENV LOAD_GEN_PROJECT /AD-Capital-Load
