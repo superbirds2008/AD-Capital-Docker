@@ -1,12 +1,18 @@
 #!/bin/bash
 
+# Agent download locations
 AGENT_DOWNLOAD=${UA_HOME}/download/monitor/java/${APPD_AGENT_VERSION}/java-${APPD_AGENT_VERSION}.zip
 MACHINE_AGENT_DOWNLOAD=${UA_HOME}/download/monitor/machine/${APPD_MACHINE_AGENT_VERSION}/machine-${APPD_MACHINE_AGENT_VERSION}-linux.zip
+
+# Installed Agent locations
 AGENT_MONITOR=${UA_HOME}/monitor/java/ver${APPD_AGENT_VERSION}
 MACHINE_AGENT_MONITOR=${UA_HOME}/monitor/machine/${APPD_MACHINE_AGENT_VERSION}/machine-agent
-ANALYTICS_AGENT_MONITOR=${MACHINE_AGENT_MONITOR}/monitors/analytics-agent
-TIMEOUT=240
 
+# Analytics Monitor location (to configure analytics)
+ANALYTICS_AGENT_MONITOR=${MACHINE_AGENT_MONITOR}/monitors/analytics-agent
+
+# Timeout for UA agent downloads
+TIMEOUT=60
 
 # Enable Transaction/Log Analytics and configure Controller/ES endpoints
 configure-analytics(){
@@ -57,6 +63,8 @@ stop-ua(){
   ps -ef -ww | grep "ua --daemon" | grep -v "grep" | awk '{print $2}' | xargs kill
 }
 
+# Download Java agent
+# Zip file is downloaded to $UA_HOME/download dir then installed to $UA_HOME/monitor
 download-agent(){
   timeout=${TIMEOUT}
   until [ -e ${AGENT_MONITOR} ]; do
@@ -79,6 +87,8 @@ download-agent(){
   done
 }
 
+# Download Machine Agent
+# Zip file is downloaded to $UA_HOME/download dir then installed to $UA_HOME/monitor
 download-machine-agent(){
   timeout=${TIMEOUT}
   until [ -e ${MACHINE_AGENT_MONITOR} ]; do
@@ -141,10 +151,6 @@ start-machine-agent(){
 
   # Set permissions for MA scripts
   chmod +x ${MACHINE_AGENT_MONITOR}/scripts/*
-
-  export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre/bin
-  export PATH=$PATH:$JAVA_HOME/bin
-  export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 
   # Start Machine Agent
   java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_MONITOR}/machineagent.jar

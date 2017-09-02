@@ -1,6 +1,5 @@
 FROM centos:centos7
 
-#RUN yum -y install unzip sysvinit-tools java-1.8.0-openjdk java-1.8.0-openjdk-devel && yum clean all
 RUN yum -y install unzip sysvinit-tools lsof java-1.8.0-openjdk && yum clean all
 
 # Actual file paths passed via docker-compose.yml
@@ -13,13 +12,16 @@ ARG APPD_UA_DEBUG
 # Canonical filenames used in startup script
 ENV UA_ZIP UniversalAgent.zip
 ENV UA_SHA256 UniversalAgent.checksum
+
 ENV UA_HOME /opt/appdynamics/universal-agent
 ENV UA_INSTALL /ua
 
+# Validate checksum for Universal Agent zip distribution
 COPY ${APPD_UA_ZIP} /${UA_ZIP}
 RUN echo "${APPD_UA_SHA256} *${UA_ZIP}" >> /$UA_SHA256
 RUN sha256sum -c ${UA_SHA256}
 
+# Install Universal Agent (Controller properties will be set at runtime)
 RUN unzip -q /${UA_ZIP} -d ${UA_INSTALL}; rm /${UA_ZIP}
 RUN chmod +x $(find ${UA_INSTALL} -maxdepth 1 -type d -name "ua?.?.?.?")/bin/install.sh
 RUN $(find ${UA_INSTALL} -maxdepth 1 -type d -name "ua?.?.?.?")/bin/install.sh  \
