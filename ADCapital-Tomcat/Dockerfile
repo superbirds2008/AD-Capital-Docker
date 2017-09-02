@@ -15,9 +15,6 @@ ENV CATALINA_HOME /tomcat
 # Install rsyslog to tail log file
 RUN yum install -y rsyslog
 
-# Install sudo for Universal Agent
-RUN yum install -y sudo
-
 # Install Tomcat
 RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
     && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
