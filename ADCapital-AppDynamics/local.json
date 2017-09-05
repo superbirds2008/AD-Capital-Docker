@@ -1,0 +1,23 @@
+{
+    "name": "default",
+    "config": {
+    },
+    "rules": [
+        {
+            "name": "java-agent",
+            "monitor": "java",
+            "config": {
+                "version": "$env_APPD_AGENT_VERSION",
+                "state": "installed"
+            }
+       },
+       {
+            "name": "machine-agent",
+            "monitor": "machine",
+            "config": {
+                "version": "$env_APPD_MACHINE_AGENT_VERSION",
+                "state": "installed"
+            }
+       }
+    ]
+}

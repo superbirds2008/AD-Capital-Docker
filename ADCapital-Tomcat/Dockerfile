@@ -12,12 +12,6 @@ ENV TOMCAT_MAJOR_VERSION 8
 ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
-# Install rsyslog to tail log file
-RUN yum install -y rsyslog
-
-# Install sudo for Universal Agent
-RUN yum install -y sudo
-
 # Install Tomcat
 RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
     && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
@@ -26,7 +20,6 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
     && rm apache-tomcat-*.tar.gz* \
     && mv apache-tomcat-${TOMCAT_MINOR_VERSION} ${CATALINA_HOME}
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
-RUN chown -R appdynamics:appdynamics ${CATALINA_HOME}
 
 # Shared directory mounted as docker volume
 ENV PROJECT /src
