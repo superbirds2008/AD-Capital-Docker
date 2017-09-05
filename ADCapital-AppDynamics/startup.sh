@@ -117,8 +117,7 @@ copy-agents(){
   echo "Downloaded App Server Agent ${APPD_AGENT_VERSION}"
 
   echo "Copying App Server Agent to volume: ${APPD_DIR}"
-  rm -rf ${APPD_DIR}/${APPD_AGENT_VERSION} && mkdir -p ${APPD_DIR}/${APPD_AGENT_VERSION}
-  unzip -q ${AGENT_DOWNLOAD} -d ${APPD_DIR}/${APPD_AGENT_VERSION}
+  mkdir -p ${APPD_DIR}/java-agent && unzip -o -q ${AGENT_DOWNLOAD} -d ${APPD_DIR}/java-agent
 
   echo "Copying AppDynamics configuration script to volume: ${APPD_DIR}"
   /bin/cp -f appdynamics.sh ${APPD_DIR}/appdynamics.sh
