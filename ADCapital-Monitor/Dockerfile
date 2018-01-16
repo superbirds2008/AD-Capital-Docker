@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM openjdk:8-jre-slim AS builder
 
 # Install required packages
 RUN apt-get update && \
@@ -16,6 +16,8 @@ ENV MA_SHA256 MachineAgentBundle.checksum
 
 COPY ${MACHINE_AGENT_ZIP} /${MA_ZIP}
 RUN echo "${MACHINE_AGENT_SHA256} *${MA_ZIP}" >> /${MA_SHA256}
+
+#COPIED OUT
 RUN sha256sum -c ${MA_SHA256}
 
 # Install AppDynamics Machine Agent

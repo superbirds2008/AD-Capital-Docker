@@ -1,6 +1,13 @@
-FROM appdynamics/adcapital-java:latest
+FROM openjdk:8
 
-RUN yum install -y git java-1.8.0-openjdk-devel && yum clean all
+RUN apt-get update
+RUN apt-get install -y git
+
+#DOCKERIZE
+ENV DOCKERIZE_VERSION v0.5.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Gradle
 RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip

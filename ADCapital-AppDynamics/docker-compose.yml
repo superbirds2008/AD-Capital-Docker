@@ -9,7 +9,7 @@ services:
     build:
       context: .
       args:
-        APPD_AGENT_ZIP: 
+        APPD_AGENT_ZIP:
         APPD_AGENT_SHA256: 
     container_name: appdynamics
     image: appdynamics/adcapital-agents
@@ -17,4 +17,3 @@ services:
         APPD_DIR: "/appdynamics"
     volumes:
     - appdynamics:/appdynamics
-

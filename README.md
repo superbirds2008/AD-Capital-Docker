@@ -12,7 +12,7 @@ The repo contains a number of docker-compose projects that can be used to run th
 
 ## Building the Container Images
 
-To build the containers, you need to supply paths to the AppDynamics Agent installers (64-bit Linux) used by the demo containers. You can download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com).  You will also need to download a copy of the JDK (64-bit Linux, RPM format) from the [Oracle Java download site](http://www.oracle.com/technetwork/java/javase/downloads/index.html) in order to build the base image: if you wish you can easily change that to use an OpenJDK version.  In each case, the pathname to the downloaded installer and the SH256 checksum for the file should be provided as args in the build: section of the relevant *docker-compose.yml* file. 
+To build the containers, you need to supply paths to the AppDynamics Agent installers (64-bit Linux) used by the demo containers. You can download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com).  You will also need to download a copy of the JDK (64-bit Linux, RPM format) from the [Oracle Java download site](http://www.oracle.com/technetwork/java/javase/downloads/index.html) in order to build the base image: if you wish you can easily change that to use an OpenJDK version.  In each case, the pathname to the downloaded installer and the SH256 checksum for the file should be provided as args in the build: section of the relevant *docker-compose.yml* file.
 
 The containers can be built as follows:
 
@@ -26,12 +26,12 @@ The containers can be built as follows:
 
 There is a docker-compose file provided to start the demo containers, inclusing load generation. To run the demo, please add your AppDynamics Controller information to the docker-compose.env file, which is included via docker-compose.  
 
-The project uses a docker volume to store the agent binaries and log/config files.  You will need to create this externally (`docker volume create --name=appdynamics`) before running the project: there is not need to install agents until you wish to run with monitoring enabled.  The project will create a separate volume (*adcapitaldocker_project*) where the source code project is mounted and built.  This volume will be removed when you stop the project (use the *-v* option)
+The project uses a docker volume to store the agent binaries and log/config files.  You will need to create this externally (`docker volume create --name=appdynamics`) before running the project: there is not need to install agents until you wish to run with monitoring enabled.  The project will create a separate volume (*adcapitaldocker_project*) where the source code project is mounted and built.  This volume will be removed when you stop the project (use the *-v* option). You will also need to create this externally if you intend to use the machine agent to gather logs for analytics. (`docker volume create --name=project`).
 
 Run the following commands to start and stop the demo:
 
 1. `docker-compose up`
-1. `docker-compose down -v` 
+1. `docker-compose down -v`
 
 To add monitoring using AppDynamics APM Agents, download the desired version of the Java Agent (Sun and JRockit JVM) and give the filename and SHA256 checksum information in *ADCapital-AppDynamics/docker-compose.yml*, then cd to the *ADCapital-AppDynamics* directory and run `docker-compose up --build`.  This will validate the agent installation, copy the files to the shared volume and configure monitoring for the application containers.  Add the four digit version string (e.g *4.3.3.6*) in the main project's *docker-compose.env* file and restart the application in the normal way.
 

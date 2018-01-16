@@ -3,7 +3,7 @@
 # Add AppDynamics Agent properties if shared volume is mounted
 # APPD_JAVAAGENT and APPD_PROPERTIES environment variables will be set
 if [ -e ${APPD_DIR}/appdynamics.sh ]; then
-  . ${APPD_DIR}/appdynamics.sh 
+  . ${APPD_DIR}/appdynamics.sh
 fi
 
 # Uncomment and expose port 8888 to enable JMX remote monitoring
@@ -17,9 +17,11 @@ rest)
   dockerize -wait tcp://adcapitaldb:3306 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
-  cd /${PROJECT}/AD-Capital; gradle createDB
+  #change this to location of gradle installation on shared volume
+  #has to run before the other containers can start
+  cd ${PROJECT}/AD-Capital; gradle createDB
 
-  cp  /${PROJECT}/AD-Capital/Rest/build/libs/Rest.war /tomcat/webapps;
+  cp  ${PROJECT}/AD-Capital/Rest/build/libs/Rest.war ${CATALINA_HOME}/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap
   ;;
@@ -27,8 +29,8 @@ portal)
   dockerize -wait tcp://rabbitmq:5672 \
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
-  
-  cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war /tomcat/webapps;
+
+  cp /${PROJECT}/AD-Capital/Portal/build/libs/portal.war ${CATALINA_HOME}/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap
   ;;
@@ -38,7 +40,7 @@ processor)
             -wait tcp://rest:8080 \
             -wait-retry-interval ${RETRY} -timeout ${TIMEOUT} || exit $?
 
-  cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war /tomcat/webapps;
+  cp /${PROJECT}/AD-Capital/Processor/build/libs/processor.war ${CATALINA_HOME}/webapps;
   cd ${CATALINA_HOME}/bin;
   java ${APPD_JAVAAGENT} ${APPD_PROPERTIES} ${JMX_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap
   ;;

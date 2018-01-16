@@ -3,6 +3,8 @@ version: '3'
 volumes:
   appdynamics:
     external: true
+  project:
+    external: true
 
 services:
   monitor:
@@ -15,13 +17,14 @@ services:
         MACHINE_AGENT_SHA256:
     image: appdynamics/appdynamics-monitor
     environment:
-      APPD_DOCKER_VISIBILITY:
-      APPD_ANALYTICS_MONITOR:
+      APPD_DOCKER_VISIBILITY: "true"
+      APPD_ANALYTICS_MONITOR: "true"
     env_file: ../docker-compose.env
     volumes:
+      - project:/project
       - /:/hostroot:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      
+
 networks:
   default:
     external:
