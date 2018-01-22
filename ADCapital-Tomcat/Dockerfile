@@ -1,53 +1,22 @@
-FROM appdynamics/adcapital-java:latest
+FROM tomcat:9-jre8
 
-# Install Gradle
-RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
-RUN unzip gradle-2.1-bin.zip -d /opt/
-RUN rm gradle-2.1-bin.zip
-ENV GRADLE_HOME /opt/gradle-2.1
+RUN apt-get update
+RUN apt-get install -y yum
+
+ENV DOCKERIZE_VERSION v0.5.0
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+# Shared directory mounted as docker volume
+ENV PROJECT /project
+
+ENV GRADLE_HOME $PROJECT/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
-# Environment vars: Tomcat
-ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_MINOR_VERSION 8.0.14
-ENV CATALINA_HOME /tomcat
-
-# Install Tomcat
-RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
-    && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
-    && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
-    && tar zxf apache-tomcat-*.tar.gz \
-    && rm apache-tomcat-*.tar.gz* \
-    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
-RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
-
-ADD AppServerAgent.zip /
-RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent; rm AppServerAgent.zip
-
-# Zip Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine-agent
-ADD MachineAgent.zip /
-RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
-
-# Add Log Analytics job files
-ADD portal-log4j.job ${MACHINE_AGENT_HOME}/
-ADD processor-log4j.job ${MACHINE_AGENT_HOME}/
-ADD rest-log4j.job ${MACHINE_AGENT_HOME}/
-
-RUN export TERM=${TERM:-dumb}
-
-# Copy AD-Capital project from build dir
-ADD AD-Capital /AD-Capital
-
-# Gradle build
-RUN cd /AD-Capital;gradle build;
-
 ADD startup.sh /
-ADD env.sh /
 RUN chmod 744 /startup.sh
-ADD start-analytics.sh /usr/bin/start-analytics
-RUN chmod 744 /usr/bin/start-analytics
 
 # Note: This command should not return or the container will exit
 CMD "/startup.sh"
