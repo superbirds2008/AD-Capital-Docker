@@ -1,0 +1,38 @@
+{
+    "labId": "app-dynamics-docker",
+    "title": "Getting Started with AppDynamics and Docker Visibility",
+    "slug": "Quickly learn how to use AppDynamics to monitor the health and business of your docker applications",
+    "time": "45",
+    "tags": [{
+        "title": ""
+    }],
+    "files": [{
+            "title": "1.md"
+        },
+        {
+            "title": "2.md"
+        },
+        {
+            "title": "3.md"
+        },
+        {
+            "title": "4.md"
+        },
+        {
+          "title": "5.md"
+        },
+        {
+          "title": "6.md"
+        }
+    ],
+    "related": [{
+            "labId": "app-dynamics-101",
+            "title": "Getting Started with AppDynamics Application Monitoring"
+        }
+    ],
+    "authors": [{
+        "name": "Eric Johanson",
+        "email": "ejoha001@cisco.com"
+    }],
+    "active": false
+}
