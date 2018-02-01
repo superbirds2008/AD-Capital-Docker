@@ -21,8 +21,8 @@ configure-analytics(){
   sed -i "/^http.event.accountName=/c\http.event.accountName=${APPD_EVENT_ACCOUNT_NAME}" ${aaprop}
   sed -i "/^http.event.accessKey=/c\http.event.accessKey=${APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY}" ${aaprop}
 
-  # Configure monitor.xml: turn on analytics monitor
-  monxml=${MACHINE_AGENT_HOME}/monitors/analytics-agent/monitor.xml
+  # # Configure monitor.xml: turn on analytics monitor
+  monxml=${MACHINE_AGENT_HOME}monitors/analytics-agent/monitor.xml
 
   sed -i 's#<enabled>false</enabled>#<enabled>true</enabled>#g' ${monxml}
 }
@@ -48,4 +48,4 @@ fi
 echo "MA_PROPERTIES: ${MA_PROPERTIES}"
 
 # Start Machine Agent
-java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_HOME}/machineagent.jar
+java ${MA_PROPERTIES} -jar /opt/appdynamics/machineagent.jar

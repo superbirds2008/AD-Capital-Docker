@@ -1,4 +1,6 @@
-FROM tomcat:9-jre8
+FROM store/appdynamics/java:4.3.7.1_tomcat9-jre8
+
+#FROM tomcat:9-jre8
 
 RUN apt-get update
 RUN apt-get install -y yum
@@ -17,6 +19,9 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 
 ADD startup.sh /
 RUN chmod 744 /startup.sh
+
+ADD setenv.sh ${CATALINA_HOME}/bin
+RUN chmod 744 ${CATALINA_HOME}/bin/setenv.sh
 
 # Note: This command should not return or the container will exit
 CMD "/startup.sh"

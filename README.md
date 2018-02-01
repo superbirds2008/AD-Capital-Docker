@@ -16,7 +16,7 @@ To build the containers, you need to supply paths to the AppDynamics Agent insta
 
 The containers can be built as follows:
 
-1. Base Image: `cd ADCapital-Java; docker-compose build`
+1. Base Image: `cd ADCapital-Tomcat; docker-compose build`
 2. Main Project: `docker-compose build`
 3. AppDynamics Agents: `cd ADCapital-AppDynamics; docker-compose build`
 4. AppDynamics Docker Visibility: `cd ADCapital-Monitor; docker-compose build`
@@ -26,7 +26,7 @@ The containers can be built as follows:
 
 There is a docker-compose file provided to start the demo containers, inclusing load generation. To run the demo, please add your AppDynamics Controller information to the docker-compose.env file, which is included via docker-compose.  
 
-The project uses a docker volume to store the agent binaries and log/config files.  You will need to create this externally (`docker volume create --name=appdynamics`) before running the project: there is not need to install agents until you wish to run with monitoring enabled.  The project will create a separate volume (*adcapitaldocker_project*) where the source code project is mounted and built.  This volume will be removed when you stop the project (use the *-v* option). You will also need to create this externally if you intend to use the machine agent to gather logs for analytics. (`docker volume create --name=project`).
+The project uses a docker volume to store the agent binaries and log/config files.  You will need to create this externally (`docker volume create --name=appdynamics`) before running the project: there is not need to install agents until you wish to run with monitoring enabled.  The project will create a separate volume (*adcapitaldocker_project*) where the source code project is mounted and built.  This volume will be removed when you stop the project (use the *-v* option). You will also need to create a second volume externally if you intend to use the machine agent to gather logs for analytics. (`docker volume create --name=project`).
 
 Run the following commands to start and stop the demo:
 

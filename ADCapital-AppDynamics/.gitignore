@@ -1,6 +1,0 @@
-# Agent binaries and checksums
-*.zip
-*.sha256
-
-# Personal environment settings
-*.yml.*
