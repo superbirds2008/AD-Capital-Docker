@@ -18,8 +18,7 @@ The containers can be built as follows:
 
 1. Base Image: `cd ADCapital-Tomcat; docker-compose build`
 2. Main Project: `docker-compose build`
-3. AppDynamics Agents: `cd ADCapital-AppDynamics; docker-compose build`
-4. AppDynamics Docker Visibility: `cd ADCapital-Monitor; docker-compose build`
+3. AppDynamics Docker Visibility: `cd ADCapital-Monitor; docker-compose build`
 
 
 ## Running the AD-Capital Demo
