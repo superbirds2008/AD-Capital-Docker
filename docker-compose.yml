@@ -18,7 +18,7 @@ services:
   adcapitaldb:
     container_name: adcapitaldb
     hostname: adcapitaldb
-    image: mysql
+    image: mysql:5.7
     logging:
       driver: "none"
     environment:
