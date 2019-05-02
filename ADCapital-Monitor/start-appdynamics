@@ -18,6 +18,7 @@ configure-analytics(){
 
   sed -i "/^ad.controller.url=/c\ad.controller.url=${CONTROLLER_ENDPOINT}" ${aaprop}
   sed -i "/^http.event.endpoint=/c\http.event.endpoint=${EVENT_ENDPOINT}" ${aaprop}
+  sed -i "/^http.event.name=/c\http.event.name=${APPDYNAMICS_AGENT_ACCOUNT_NAME}" ${aaprop}
   sed -i "/^http.event.accountName=/c\http.event.accountName=${APPD_EVENT_ACCOUNT_NAME}" ${aaprop}
   sed -i "/^http.event.accessKey=/c\http.event.accessKey=${APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY}" ${aaprop}
 
