@@ -10,7 +10,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Gradle
-RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
+RUN wget https://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip gradle-2.1-bin.zip -d /opt/
 RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1

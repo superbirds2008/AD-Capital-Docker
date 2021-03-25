@@ -3,7 +3,7 @@ FROM openjdk:8
 RUN apt-get install -y git
 
 # Install Gradle (unzip this into the shared volume (into appdynamics))
-RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
+RUN wget https://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip gradle-2.1-bin.zip -d /opt
 RUN rm gradle-2.1-bin.zip
 
