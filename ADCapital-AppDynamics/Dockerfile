@@ -1,4 +1,4 @@
-FROM centos:centos6
+FROM centos:centos7
 #FROM store/appdynamics/java:4.3.7.1_tomcat9-jre8
 
 RUN yum -y install unzip

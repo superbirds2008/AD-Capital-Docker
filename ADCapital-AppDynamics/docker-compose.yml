@@ -9,8 +9,8 @@ services:
     build:
       context: .
       args:
-        APPD_AGENT_ZIP:
-        APPD_AGENT_SHA256:
+        APPD_AGENT_ZIP:  AppServerAgent-1.8-22.8.0.34104.zip
+        APPD_AGENT_SHA256: b8e81c14ea5633837fb23f1cb2534f3497a5f072034ccd55df0a7c60f5d8dc28
     container_name: appdynamics
     image: appdynamics/adcapital-agents
     environment:
