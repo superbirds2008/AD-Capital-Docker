@@ -14,6 +14,8 @@ services:
     image: appdynamics/adcapital-project
     volumes:
     - project:/project
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   adcapitaldb:
     container_name: adcapitaldb
@@ -25,6 +27,8 @@ services:
     - "MYSQL_ROOT_PASSWORD=welcome1"
     ports:
     - "3306:3306"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   rabbitmq:
     container_name: rabbitmq
@@ -37,6 +41,8 @@ services:
     - "RABBITMQ_DEFAULT_PASS=guest"
     ports:
     - "5672:5672"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   rest:
     container_name: rest
@@ -59,6 +65,8 @@ services:
     - "rabbitmq"
     ports:
     - "8081:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   portal:
     container_name: portal
@@ -81,6 +89,8 @@ services:
     - "rabbitmq"
     ports:
     - "8082:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   verification:
     container_name: verification
@@ -103,6 +113,8 @@ services:
     - "rabbitmq"
     ports:
     - "8083:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   processor:
     container_name: processor
@@ -125,6 +137,8 @@ services:
     - "rabbitmq"
     ports:
     - "8084:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   approval:
     container_name: approval
@@ -147,6 +161,8 @@ services:
     - "rabbitmq"
     ports:
     - "8085:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
   load:
     container_name: adcapitalload
@@ -158,3 +174,5 @@ services:
     depends_on:
     - "portal"
     - "processor"
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"

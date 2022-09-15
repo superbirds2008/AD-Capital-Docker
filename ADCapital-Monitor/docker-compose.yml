@@ -24,8 +24,12 @@ services:
       - project:/project
       - /:/hostroot:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
 
 networks:
   default:
     external:
       name: adcapitaldocker_default
+
+
