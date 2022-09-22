@@ -176,3 +176,5 @@ services:
     - "processor"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
