@@ -5,8 +5,21 @@ volumes:
     external: true
   appdynamics:
     external: true
+  grafana_data:
+    external: true
 
 services:
+  grafana:
+    image: grafana/grafana:6.6.2
+    container_name: grafana
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../configs/grafana/dashboards:/var/lib/grafana/dashboards
+      - ../configs/grafana/:/etc/grafana/
+      - ../configs/grafana/provisioning:/etc/grafana/provisioning
   project:
     container_name: project
     build:

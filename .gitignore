@@ -12,3 +12,4 @@ jdk-*.rpm
 #ignore Tomcat distro files
 *.tar.gz
 
+.vagrant/
