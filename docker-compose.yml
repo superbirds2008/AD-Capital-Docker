@@ -9,17 +9,17 @@ volumes:
     external: true
 
 services:
-  grafana:
-    image: grafana/grafana:6.6.2
-    container_name: grafana
-    restart: always
-    ports:
-      - 3000:3000
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ../configs/grafana/dashboards:/var/lib/grafana/dashboards
-      - ../configs/grafana/:/etc/grafana/
-      - ../configs/grafana/provisioning:/etc/grafana/provisioning
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #     - ../configs/grafana/dashboards:/var/lib/grafana/dashboards
+  #     - ../configs/grafana/:/etc/grafana/
+  #     - ../configs/grafana/provisioning:/etc/grafana/provisioning
   project:
     container_name: project
     build:
@@ -42,6 +42,8 @@ services:
     - "3306:3306"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   rabbitmq:
     container_name: rabbitmq
@@ -56,6 +58,8 @@ services:
     - "5672:5672"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   rest:
     container_name: rest
@@ -80,6 +84,8 @@ services:
     - "8081:8080"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   portal:
     container_name: portal
@@ -104,6 +110,8 @@ services:
     - "8082:8080"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   verification:
     container_name: verification
@@ -128,6 +136,8 @@ services:
     - "8083:8080"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   processor:
     container_name: processor
@@ -152,6 +162,8 @@ services:
     - "8084:8080"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   approval:
     container_name: approval
@@ -176,6 +188,8 @@ services:
     - "8085:8080"
     extra_hosts:
       - "appdserver.demo.io:10.1.1.2"
+    restart:
+      always
 
   load:
     container_name: adcapitalload
