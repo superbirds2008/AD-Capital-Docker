@@ -20,6 +20,27 @@ services:
   #     - ../configs/grafana/dashboards:/var/lib/grafana/dashboards
   #     - ../configs/grafana/:/etc/grafana/
   #     - ../configs/grafana/provisioning:/etc/grafana/provisioning
+  networkvizagent:
+    # image: path/to/your/docker/image # docker registry image
+    container_name: networkvizagent 
+    network_mode: "host"
+    build:
+      context: ADCapital-NetworkAgent
+      args:
+       NETVIZ_ZIP_PKG: appd-netviz-x64-linux-21.3.0.2181.zip
+    restart: unless-stopped 
+    volumes:
+      - project:/project
+      - appdynamics:/appdynamics
+    ports:
+      - "3892:3892"
+    env_file: ./docker-compose.env
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    extra_hosts:
+      - "appdserver.demo.io:10.1.1.2"
+
   project:
     container_name: project
     build:
