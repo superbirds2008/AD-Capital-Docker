@@ -1,5 +1,6 @@
 FROM centos:centos7
-
+RUN echo proxy=http://proxy-wsa.esl.cisco.com:80 >> /etc/yum.conf
+RUN echo ip_resolve=4 >> /etc/yum.conf
 RUN yum update -y && yum install -y \
   net-tools \
   iproute \
