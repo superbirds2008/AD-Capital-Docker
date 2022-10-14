@@ -25,7 +25,7 @@ services:
       - /:/hostroot:ro
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
-      - "appdserver.demo.io:10.1.1.2"
+      - "appdserver.demo.io:10.124.52.26"
     restart:
       always
 
