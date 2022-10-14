@@ -1,12 +1,13 @@
 FROM openjdk:8-jre-slim AS builder
 
 # Install required packages
-RUN export http_prxoy=http://proxy-wsa.esl.cisco.com:80
-RUN export https_proxy=http://proxy-wsa.esl.cisco.com:80
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y unzip && \
-    apt-get clean
+RUN echo Acquire::http::proxy "http_prxoy=http://proxy-wsa.esl.cisco.com:80/" >> /etc/apt/apt.conf
+RUN echo Acquire::https::proxy "http_prxoy=http://proxy-wsa.esl.cisco.com:80/" >> /etc/apt/apt.conf
+RUN http_proxy='http://proxy-wsa.esl.cisco.com:80' https_proxy='http://proxy-wsa.esl.cisco.com:80' apt-get update && \
+    http_proxy='http://proxy-wsa.esl.cisco.com:80' https_proxy='http://proxy-wsa.esl.cisco.com:80' apt-get upgrade -y && \
+    http_proxy='http://proxy-wsa.esl.cisco.com:80' https_proxy='http://proxy-wsa.esl.cisco.com:80' apt-get install -y unzip && \
+    http_proxy='http://proxy-wsa.esl.cisco.com:80' https_proxy='http://proxy-wsa.esl.cisco.com:80' apt-get clean
+
 
 # Actual file paths passed via docker-compose.yml
 ARG MACHINE_AGENT_ZIP
