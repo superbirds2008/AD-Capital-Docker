@@ -23,7 +23,7 @@ RUN git config --global http.proxy http://proxy-wsa.esl.cisco.com:80
 RUN git clone https://github.com/Appdynamics/AD-Capital-Load.git
 
 ENV LOAD_GEN_PROJECT /AD-Capital-Load
-RUN cd ${LOAD_GEN_PROJECT}; gradle distZip
+RUN cd ${LOAD_GEN_PROJECT}; gradle -Dhttp.proxyHost=proxy-wsa.esl.cisco.com -Dhttp.proxyPort=80 distZip
 RUN unzip ${LOAD_GEN_PROJECT}/build/distributions/load-generator.zip -d /
 RUN chmod +x ${LOAD_GEN_PROJECT}/bin/*
 

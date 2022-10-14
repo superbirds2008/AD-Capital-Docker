@@ -16,7 +16,7 @@ RUN git config --global http.proxy http://proxy-wsa.esl.cisco.com:80
 RUN git clone -b logging --single-branch https://github.com/Appdynamics/AD-Capital.git
 
 # Gradle build
-RUN cd /AD-Capital; gradle build uberjar
+RUN cd /AD-Capital; gradle -Dhttp.proxyHost=proxy-wsa.esl.cisco.com -Dhttp.proxyPort=80 build uberjar
 
 # Shared directory mounted as docker volume
 ENV PROJECT /project
