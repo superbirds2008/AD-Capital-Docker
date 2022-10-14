@@ -4,8 +4,9 @@ RUN apt-get update
 # RUN apt-get install -y yum
 
 ENV DOCKERIZE_VERSION v0.5.0
-
-RUN wget -x http://proxy-wsa.esl.cisco.com:80 https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+ENV http_prxoy=http://proxy-wsa.esl.cisco.com:80
+ENV https_proxy=http://proxy-wsa.esl.cisco.com:80
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 

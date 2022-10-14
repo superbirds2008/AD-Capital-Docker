@@ -1,9 +1,10 @@
 FROM openjdk:8
 
 RUN apt-get install -y git
-
+ENV http_prxoy=http://proxy-wsa.esl.cisco.com:80
+ENV https_proxy=http://proxy-wsa.esl.cisco.com:80
 # Install Gradle (unzip this into the shared volume (into appdynamics))
-RUN wget -x http://proxy-wsa.esl.cisco.com:80 https://downloads.gradle.org/distributions/gradle-2.1-bin.zip
+RUN wget https://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip gradle-2.1-bin.zip -d /opt
 RUN rm gradle-2.1-bin.zip
 
