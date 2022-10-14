@@ -1,6 +1,8 @@
 FROM openjdk:8-jre-slim AS builder
 
 # Install required packages
+RUN export http_prxoy=http://proxy-wsa.esl.cisco.com:80
+RUN export https_proxy=http://proxy-wsa.esl.cisco.com:80
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y unzip && \
