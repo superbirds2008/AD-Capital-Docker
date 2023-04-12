@@ -43,6 +43,8 @@ services:
 
   project:
     container_name: project
+    deploy:
+      replicas: 0
     build:
       context: ADCapital-Project
     image: appdynamics/adcapital-project
@@ -53,6 +55,8 @@ services:
 
   adcapitaldb:
     container_name: adcapitaldb
+    deploy:
+      replicas: 0
     hostname: adcapitaldb
     image: mysql:5.7
     logging:
@@ -68,6 +72,8 @@ services:
 
   rabbitmq:
     container_name: rabbitmq
+    deploy:
+      replicas: 0
     hostname: rabbitmq
     image: rabbitmq:3.5.4-management
     logging:
@@ -110,6 +116,8 @@ services:
 
   portal:
     container_name: portal
+    deploy:
+      replicas: 0
     hostname: portal
     build:
       context: ./ADCapital-Tomcat
@@ -136,6 +144,8 @@ services:
 
   verification:
     container_name: verification
+    deploy:
+      replicas: 0
     hostname: verification
     build:
       context: ./ADCapital-Tomcat
@@ -162,6 +172,8 @@ services:
 
   processor:
     container_name: processor
+    deploy:
+      replicas: 0
     hostname: processor
     build:
       context: ./ADCapital-Tomcat
@@ -188,6 +200,8 @@ services:
 
   approval:
     container_name: approval
+    deploy:
+      replicas: 0
     hostname: approval
     build:
       context: ./ADCapital-Tomcat
@@ -214,6 +228,8 @@ services:
 
   load:
     container_name: adcapitalload
+    deploy:
+      replicas: 0
     hostname: adcapitalload
     build:
       context: ./ADCapital-Load
