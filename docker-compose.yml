@@ -86,6 +86,32 @@ services:
     restart:
       always
 
+  rest:
+    container_name: rest
+    hostname: rest
+    build:
+      context: ./ADCapital-Tomcat
+    image: appdynamics/adcapital-tomcat
+    volumes:
+    - project:/project
+    - appdynamics:/appdynamics
+    logging:
+      driver: "none"
+    env_file: ./docker-compose.env
+    environment:
+    - "ROLE=rest"
+    - "APPDYNAMICS_AGENT_NODE_NAME=Rest"
+    - "APPDYNAMICS_AGENT_TIER_NAME=Authentication-Service"
+    depends_on:
+    - "adcapitaldb"
+    - "rabbitmq"
+    ports:
+    - "8081:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.124.52.26"
+    restart:
+      always
+
   portal:
     container_name: portal
     hostname: portal
