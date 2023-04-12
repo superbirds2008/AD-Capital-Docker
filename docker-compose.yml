@@ -32,6 +32,7 @@ services:
 
   rest:
     container_name: rest
+    network_mode: "host"
     hostname: rest
     build:
       context: ./ADCapital-Tomcat
