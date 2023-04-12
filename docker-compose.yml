@@ -46,9 +46,6 @@ services:
     - "ROLE=rest"
     - "APPDYNAMICS_AGENT_NODE_NAME=Rest"
     - "APPDYNAMICS_AGENT_TIER_NAME=Authentication-Service"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
     ports:
     - "8081:8080"
     extra_hosts:
