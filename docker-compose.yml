@@ -9,6 +9,17 @@ volumes:
     external: true
 
 services:
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #     - ../configs/grafana/dashboards:/var/lib/grafana/dashboards
+  #     - ../configs/grafana/:/etc/grafana/
+  #     - ../configs/grafana/provisioning:/etc/grafana/provisioning
   networkvizagent:
     # image: path/to/your/docker/image # docker registry image
     container_name: networkvizagent 
@@ -30,25 +41,32 @@ services:
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
 
-  rest:
-    container_name: rest
-    network_mode: "host"
-    hostname: rest
-    build:
-      context: ./ADCapital-Tomcat
-    image: appdynamics/adcapital-tomcat
-    volumes:
-    - project:/project
-    - appdynamics:/appdynamics
+  adcapitaldb:
+    container_name: adcapitaldb
+    hostname: adcapitaldb
+    image: mysql:5.7
     logging:
       driver: "none"
-    env_file: ./docker-compose.env
     environment:
-    - "ROLE=rest"
-    - "APPDYNAMICS_AGENT_NODE_NAME=Rest"
-    - "APPDYNAMICS_AGENT_TIER_NAME=Authentication-Service"
+    - "MYSQL_ROOT_PASSWORD=welcome1"
     ports:
-    - "8081:8080"
+    - "3306:3306"
+    extra_hosts:
+      - "appdserver.demo.io:10.124.52.26"
+    restart:
+      always
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3.5.4-management
+    logging:
+      driver: "none"
+    environment:
+    - "RABBITMQ_DEFAULT_USER=guest"
+    - "RABBITMQ_DEFAULT_PASS=guest"
+    ports:
+    - "5672:5672"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
     restart:
