@@ -39,6 +39,8 @@ services:
       - NET_ADMIN
       - NET_RAW
     extra_hosts:
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
 
   project:
@@ -50,37 +52,8 @@ services:
     - project:/project
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
-
-  adcapitaldb:
-    container_name: adcapitaldb
-    hostname: adcapitaldb
-    image: mysql:5.7
-    logging:
-      driver: "none"
-    environment:
-    - "MYSQL_ROOT_PASSWORD=welcome1"
-    ports:
-    - "3306:3306"
-    extra_hosts:
-      - "appdserver.demo.io:10.124.52.26"
-    restart:
-      always
-
-  rabbitmq:
-    container_name: rabbitmq
-    hostname: rabbitmq
-    image: rabbitmq:3.5.4-management
-    logging:
-      driver: "none"
-    environment:
-    - "RABBITMQ_DEFAULT_USER=guest"
-    - "RABBITMQ_DEFAULT_PASS=guest"
-    ports:
-    - "5672:5672"
-    extra_hosts:
-      - "appdserver.demo.io:10.124.52.26"
-    restart:
-      always
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
 
   rest:
     container_name: rest
@@ -98,13 +71,37 @@ services:
     - "ROLE=rest"
     - "APPDYNAMICS_AGENT_NODE_NAME=Rest"
     - "APPDYNAMICS_AGENT_TIER_NAME=Authentication-Service"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
     ports:
     - "8081:8080"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
+    restart:
+      always
+
+  portal:
+    container_name: portal
+    hostname: portal
+    build:
+      context: ./ADCapital-Tomcat
+    image: appdynamics/adcapital-tomcat
+    volumes:
+    - project:/project
+    - appdynamics:/appdynamics
+    logging:
+      driver: "none"
+    env_file: ./docker-compose.env
+    environment:
+    - "ROLE=portal"
+    - "APPDYNAMICS_AGENT_NODE_NAME=Portal"
+    - "APPDYNAMICS_AGENT_TIER_NAME=Portal-Service"
+    ports:
+    - "8082:8080"
+    extra_hosts:
+      - "appdserver.demo.io:10.124.52.26"
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
     restart:
       always
 
@@ -124,12 +121,11 @@ services:
     - "ROLE=verification"
     - "APPDYNAMICS_AGENT_NODE_NAME=Verification"
     - "APPDYNAMICS_AGENT_TIER_NAME=Verification-Service"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
     ports:
     - "8083:8080"
     extra_hosts:
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
@@ -150,12 +146,11 @@ services:
     - "ROLE=processor"
     - "APPDYNAMICS_AGENT_NODE_NAME=Processor"
     - "APPDYNAMICS_AGENT_TIER_NAME=LoanProcessor-Services"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
     ports:
     - "8084:8080"
     extra_hosts:
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
@@ -176,12 +171,11 @@ services:
     - "ROLE=approval"
     - "APPDYNAMICS_AGENT_NODE_NAME=Approval"
     - "APPDYNAMICS_AGENT_TIER_NAME=Approval-Services"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
     ports:
     - "8085:8080"
     extra_hosts:
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
@@ -197,6 +191,8 @@ services:
     - "portal"
     - "processor"
     extra_hosts:
+      - "adcapitaldb:172.16.33.2"
+      - "rabbitmq:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
