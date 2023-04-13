@@ -39,7 +39,6 @@ services:
       - NET_ADMIN
       - NET_RAW
     extra_hosts:
-      - "rest:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
 
   project:
@@ -50,7 +49,6 @@ services:
     volumes:
     - project:/project
     extra_hosts:
-      - "rest:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
 
   adcapitaldb:
@@ -64,7 +62,6 @@ services:
     ports:
     - "3306:3306"
     extra_hosts:
-      - "rest:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
@@ -82,7 +79,6 @@ services:
     - "5672:5672"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
-      - "rest:172.16.33.2"
     restart:
       always
 
@@ -112,33 +108,6 @@ services:
     restart:
       always
 
-  portal:
-    container_name: portal
-    hostname: portal
-    build:
-      context: ./ADCapital-Tomcat
-    image: appdynamics/adcapital-tomcat
-    volumes:
-    - project:/project
-    - appdynamics:/appdynamics
-    logging:
-      driver: "none"
-    env_file: ./docker-compose.env
-    environment:
-    - "ROLE=portal"
-    - "APPDYNAMICS_AGENT_NODE_NAME=Portal"
-    - "APPDYNAMICS_AGENT_TIER_NAME=Portal-Service"
-    depends_on:
-    - "adcapitaldb"
-    - "rabbitmq"
-    ports:
-    - "8082:8080"
-    extra_hosts:
-      - "appdserver.demo.io:10.124.52.26"
-      - "rest:172.16.33.2"
-    restart:
-      always
-
   verification:
     container_name: verification
     hostname: verification
@@ -162,7 +131,6 @@ services:
     - "8083:8080"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
-      - "rest:172.16.33.2"
     restart:
       always
 
@@ -188,7 +156,6 @@ services:
     ports:
     - "8084:8080"
     extra_hosts:
-      - "rest:172.16.33.2"
       - "appdserver.demo.io:10.124.52.26"
     restart:
       always
@@ -216,7 +183,6 @@ services:
     - "8085:8080"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
-      - "rest:172.16.33.2"
     restart:
       always
 
@@ -232,6 +198,5 @@ services:
     - "processor"
     extra_hosts:
       - "appdserver.demo.io:10.124.52.26"
-      - "rest:172.16.33.2"
     restart:
       always
