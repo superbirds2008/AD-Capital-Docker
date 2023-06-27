@@ -13,3 +13,4 @@ jdk-*.rpm
 *.tar.gz
 
 .vagrant/
+*.DS_Store
